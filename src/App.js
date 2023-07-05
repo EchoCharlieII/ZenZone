@@ -10,7 +10,7 @@ import SignUp from './pages/signup';
 import Contact from './pages/contact';
 import Map from './pages/map';
 import MyMap from './components/MyMap';
-import nothing
+
  
 function App() {
     return (
