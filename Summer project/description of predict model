@@ -1,9 +1,1 @@
-Hi guys, here's our first predict model! 
-Since the file size is too large to put it ion github, I save it into google drive, here's the link:
-https://drive.google.com/drive/folders/14y_r7r_NfqpXb8QiZ0GefYIDbCRWP9Tm?usp=drive_link
-So there're 69 taxi zones in NYC and we'll create every pickel file for each taxi zone, just like what we did in the dublin bike project.
-And this is the first one, I will continue to upload the rest to this drive。
-Input to this model should be like time_of_day group by 15 mins，eg:00:00:00AM is 0, 00:15:00 is 15 and 00:30:00 is 30.....
-output will be calm rate of every zone, which is a number between 0 and 1
-For now we have average calm rate of every zone, we also will have more specific information like precise calm rate to each street node. 
-We will be working on these in more detail over the next few days。
+
