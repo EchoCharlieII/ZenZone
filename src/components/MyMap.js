@@ -1,13 +1,42 @@
 // This component will be used to render the map
 
-import React from 'react';
-import {MapContainer, TileLayer, Marker} from 'react-leaflet';
+import React, { useEffect, useState } from 'react';
+import {MapContainer, TileLayer, Polyline} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+
+// Importing the CSV parser function
+import { parseCSVData } from './csvParser';
+import predictionsCSV from '../data/predictions.csv';
 
 function MyMap() {
 
     // Setting the coordinates for the center of NYC
     const centerCoordinates = [40.725, -74.0060];
+    const [polylines, setPolylines] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(predictionsCSV);
+                const csvData = await response.text();
+                const parsedData = await parseCSVData(csvData);
+                // Process the parsed CSV data
+                console.log(parsedData);
+                // Update the polylines state with the LINESTRING coordinates
+                // We are limiting the number to 1500 for testing
+                const limitedPolylines = parsedData 
+                    .filter(item => item.geometry)
+                    .map(item => item.geometry)
+                    .slice(0,1500);
+                setPolylines(limitedPolylines);
+            } catch (error) {
+                console.error('Error parsing CSV:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
 
     return (
         <MapContainer
@@ -20,11 +49,37 @@ function MyMap() {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution="Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors"
             />
-            {/*Add markers or other map layers here*/}
+            {polylines.map((lineString, index) => (
+                <Polyline
+                    key={index}
+                    positions={parseLineStringCoordinates(lineString)}
+                    color="red" // Set to color of the polyline
+                />
+            ))}
 
         </MapContainer>
 
     );
 }
+
+// Helper function to parse LINESTRING coordinates
+function parseLineStringCoordinates(lineString) {
+    try {
+      const coordinateString = lineString.replace('LINESTRING (', '').replace(')', '');
+      const coordinates = coordinateString.split(',').map(coord => {
+        const [lng, lat] = coord.trim().split(' ');
+        const parsedLat = parseFloat(lat);
+        const parsedLng = parseFloat(lng);
+        if (isNaN(parsedLat) || isNaN(parsedLng)) {
+          throw new Error('Invalid coordinates');
+        }
+        return [parsedLat, parsedLng];
+      });
+      return coordinates;
+    } catch (error) {
+      console.error('Error parsing LINESTRING coordinates:', error);
+      return [];
+    }
+  }
 
 export default MyMap;
