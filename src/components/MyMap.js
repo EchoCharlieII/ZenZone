@@ -23,11 +23,13 @@ function MyMap() {
                 // Process the parsed CSV data
                 console.log(parsedData);
                 // Update the polylines state with the LINESTRING coordinates
-                // We are limiting the number to 1500 for testing
                 const limitedPolylines = parsedData 
-                    .filter(item => item.geometry)
-                    .map(item => item.geometry)
-                    .slice(0,1500);
+                    .filter(item => item.geometry && item.street_calm_rate !== undefined)
+                    .map(item => ({
+                        geometry: item.geometry,
+                        street_calm_rate: parseFloat(item.street_calm_rate),
+                    }))
+                    .slice(0,1500); // Limiting the number of streets to 1500
                 setPolylines(limitedPolylines);
             } catch (error) {
                 console.error('Error parsing CSV:', error);
@@ -36,6 +38,13 @@ function MyMap() {
 
         fetchData();
     }, []);
+
+    const getLineColour = (streetCalmRate) => {
+        // Calculate the colour of the street based on the calm rate
+        const red = Math.round(255 * (1 - streetCalmRate));
+        const green = Math.round(255 * streetCalmRate);
+        return `rgb(${red}, ${green}, 0)`;
+    };
 
 
     return (
@@ -52,8 +61,8 @@ function MyMap() {
             {polylines.map((lineString, index) => (
                 <Polyline
                     key={index}
-                    positions={parseLineStringCoordinates(lineString)}
-                    color="red" // Set to color of the polyline
+                    positions={parseLineStringCoordinates(lineString.geometry)}
+                    color={getLineColour(lineString.street_calm_rate)} // Set to color of the polyline
                 />
             ))}
 
