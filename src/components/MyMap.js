@@ -29,7 +29,7 @@ function MyMap() {
                         geometry: item.geometry,
                         street_calm_rate: parseFloat(item.street_calm_rate),
                     }))
-                    .slice(0,50000); // Limiting the number of streets to 1500
+                    .slice(0,30000); // Limiting the number of streets to 30000
                 setPolylines(limitedPolylines);
             } catch (error) {
                 console.error('Error parsing CSV:', error);
