@@ -22,6 +22,9 @@ const Navbar = () => {
                     <NavLink to="/map" activeStyle>
                         Map
                     </NavLink>
+                    <NavLink to="/route" activeStyle>
+                        Route
+                    </NavLink>
                 </NavMenu>
             </Nav>
         </>
