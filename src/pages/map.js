@@ -11,6 +11,7 @@ const Map = () => {
             </h1>
         <MyMap />
         </div>
+        
     );
 };
  

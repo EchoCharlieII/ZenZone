@@ -7,7 +7,7 @@ const Map = () => {
     return (
         <div>
             <h1>
-                This is the page for the Map.
+                This is the page for the Routing Function.
             </h1>
         <MyMap />
         </div>

@@ -14,6 +14,22 @@ function MyMap() {
     const centerCoordinates = [40.725, -74.0060];
     const [polylines, setPolylines] = useState([]);
 
+
+    const [selectedDate, setSelectedDate] = useState('');
+
+    const handleDateChange = (event) => {
+        setSelectedDate(event.target.value);
+      };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        // Here you can send the selectedDate value to the backend using JSON format
+        // You can make an HTTP request or invoke a function that handles the data submission
+        console.log(selectedDate);
+    };
+
+
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -58,6 +74,8 @@ function MyMap() {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution="Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors"
             />
+
+
             {polylines.map((lineString, index) => (
                 <Polyline
                     key={index}
@@ -65,6 +83,22 @@ function MyMap() {
                     color={getLineColour(lineString.street_calm_rate)} // Set to color of the polyline
                 />
             ))}
+
+
+            {/* Date Selection Form */}
+        <div>
+            <form onSubmit={handleSubmit}>
+                <label>
+                    Select a date:
+                <input
+                    type="date"
+                    value={selectedDate}
+                    onChange={handleDateChange}
+                />
+                </label>
+                    <button type="submit">Submit</button>
+            </form>
+        </div>
 
         </MapContainer>
 
