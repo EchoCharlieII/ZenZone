@@ -16,8 +16,7 @@ modelIdRange = [4, 12, 13, 24, 41, 42, 43, 45, 48, 50, 68, 74, 75, 79, 87, 88, 9
 def predict_by_id(request):
     current_time = datetime.now()
     data = json.loads(request.body)
-    # print(type(data['id']))
-    # return HttpResponse('test')
+
     # check the passed data is number and in the specific range
     if isinstance(data['id'], int) and (data['id'] in modelIdRange):
         model_id = data['id']
@@ -49,4 +48,7 @@ def predict_by_id(request):
         predict_result = model.predict([[temp, month, time_of_week]])[0]
 
     # return result
-    return JsonResponse({'Taxi_Zone_ID': model_id, 'calm_rate': predict_result})
+    return JsonResponse({
+        'Taxi_Zone_ID': model_id,
+        'calm_rate': predict_result}
+    )

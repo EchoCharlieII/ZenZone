@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'corsheaders',
 
     # different API groups
-    'predict_api'
+    'predict_api',
+    'map_api'
 ]
 
 MIDDLEWARE = [
