@@ -67,7 +67,7 @@ function MyMap() {
         <MapContainer
             center={centerCoordinates}
             zoom={13}
-            style={{height: '400px', width:'100%'}}
+            style={{minHeight: '400px', width:'100%'}}
         >
             {/* I'm not too sure what this part is useful for yet */}
             <TileLayer

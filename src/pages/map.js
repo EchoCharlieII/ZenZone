@@ -1,5 +1,6 @@
 import React from "react";
 import MyMap from '../components/MyMap';
+import CustomDatePicker from '../components/ZonePrediction/CustomDatePicker';
 
 
  
@@ -9,6 +10,7 @@ const Map = () => {
             <h1>
                 This is the page for the Map.
             </h1>
+        <CustomDatePicker />
         <MyMap />
         </div>
         
