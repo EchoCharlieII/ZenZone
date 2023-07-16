@@ -1,0 +1,46 @@
+@keyframes fallingLeavesAnimation {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(100%);
+    }
+  }
+  
+  .home-container {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  .animated-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #5ea55e, #6fbf6f, #4d944d);
+    background-size: 200% 200%;
+    animation: backgroundAnimation 10s ease infinite;
+  }
+  
+  /* .falling-leaves {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/path/to/falling-leaves.png');
+    background-size: contain;
+    animation: fallingLeavesAnimation 10s linear infinite;
+  } */
+  
+  .content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  /* Rest of the existing styles for home-title, home-description, home-image, and home-button */
+  
