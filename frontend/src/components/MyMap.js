@@ -4,6 +4,10 @@ import React, { useEffect, useState } from 'react';
 import {MapContainer, TileLayer, Polyline} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 
+// Importing the Loading Component
+import Loading from './PageLoading/loading';
+
+
 // Importing the CSV parser function
 import { parseCSVData } from './csvParser';
 import predictionsCSV from '../data/predictions.csv';
@@ -13,6 +17,10 @@ function MyMap() {
     // Setting the coordinates for the center of NYC
     const centerCoordinates = [40.725, -74.0060];
     const [polylines, setPolylines] = useState([]);
+
+
+    // Setting the state for the Loading Screen
+    const[isLoading, setLoading] = useState(true);
 
 
     const [selectedDate, setSelectedDate] = useState('');
@@ -47,6 +55,7 @@ function MyMap() {
                     }))
                     .slice(0,30000); // Limiting the number of streets to 30000
                 setPolylines(limitedPolylines);
+                setLoading(false) // Set loading state to false when render is complete
             } catch (error) {
                 console.error('Error parsing CSV:', error);
             }
@@ -64,7 +73,11 @@ function MyMap() {
 
 
     return (
-        <MapContainer
+        <div>
+            {isLoading ? ( // Conditional rendering of loading screen
+                <Loading />
+            ) : (
+                <MapContainer
             center={centerCoordinates}
             zoom={13}
             style={{minHeight: '400px', width:'100%'}}
@@ -101,6 +114,8 @@ function MyMap() {
         </div>
 
         </MapContainer>
+            )}
+        </div>
 
     );
 }
