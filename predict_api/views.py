@@ -52,3 +52,26 @@ def predict_by_id(request):
         'Taxi_Zone_ID': model_id,
         'calm_rate': predict_result}
     )
+
+
+@csrf_exempt
+def my_view_function(request):
+    if request.method == 'POST':
+        print('Test')
+        try:
+            data = json.loads(request.body)
+            # Process the JSON data as needed
+            # For example, you can access specific values using data['key']
+            
+            # Generate a response JSON
+            response_data = {
+                'message': 'Data received successfully',
+                'received_data': data
+            }
+            print('Testing 2')
+            return JsonResponse(response_data)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+    
+    # Return an error if the request method is not POST
+    return JsonResponse({'error': 'Invalid request method'}, status=405)

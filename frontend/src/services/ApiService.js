@@ -10,7 +10,7 @@ const ApiService = {
     submitDate: async (date) => {
         try {
             // Generating the POST request to the backend
-            const response = await axios.post('https://example.com/submit', { date });
+            const response = await axios.post('http://localhost:8000/predict_api/dummy_test', { date });
             // Handle the response from the backend
             console.log('Response:', response.data);
             return response.data;
