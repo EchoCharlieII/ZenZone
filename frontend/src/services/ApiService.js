@@ -18,6 +18,7 @@ const ApiService = {
             // Handle any errors
             console.error('Error:', error);
             throw error;
+            // New Change
           }
     },
 };
