@@ -1,7 +1,10 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import MyMap from '../components/MyMap';
 import CustomDatePicker from '../components/ZonePrediction/CustomDatePicker';
 import SubmitButton from "../components/ZonePrediction/SubmitButton";
+
+// Importing the component for the loading screen
+//import Loading from "../components/PageLoading/loading";
 
  
 const Map = () => {
@@ -18,6 +21,17 @@ const Map = () => {
         // Clear the selected date after submission if needed
         setSelectedDate(null);
     };
+
+    // Here we have the code for the loading screen of the page
+    //const [isLoading, setLoading] = useState(true);
+
+    /*useEffect(() => {
+        // Simulating a delay to demonstrate the loading screen
+        setTimeout(() => {
+            setLoading(false);
+        }, 2000);
+    }, []);
+    */
 
     return (
         <div>
