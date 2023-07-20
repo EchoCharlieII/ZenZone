@@ -1,0 +1,19 @@
+Since datasets are bigger than 25MB, I'll share google drive link here for everyone who wanna check or use it. 
+Correspongding data processing jupyter file I'll share in the branch I created.
+https://drive.google.com/drive/folders/174I1hLELSUmeHOAYGJAjvT9CwZVWCKh9?usp=drive_link
+Here's description of 3 dataset:
+  taxi data:
+    columns: datetime, Taxi_Zone_ID(stands for 69 taxi xons in Manhattan), taxi_busyness: an index represent how busy in an area at a time, higher means higher recommendation of calm
+    alogrithm of calculating busyness: group 10 teams by frequency, rate 0-1 on each team. Weight 0.3 on pickup action, 0.7 on drop off action.
+                                      taxi_busyness=group rate*action*(1/passenger_count)----->rescale it between 0 and 1----->0 means most chaos, not recommond; 
+                                                                                                                               1 means most quit, recommond.
+  bike data:
+    columns: datetime, station id, bike_busyness: similiar with taxi data
+    alogrithm of calculating busyness: group 20 teams by frequency, rate 0-1 on each team. Weight 0.3 on pickup action, 0.7 on drop off action.
+                                      taxi_busyness=group rate*action----->rescale it between 0 and 1----->0 means most chaos, not recommond; 
+                                                                                                                               1 means most quit, recommond.
+volume data:
+    columns: datetime, station id, bike_busyness: similiar with taxi data
+    alogrithm of calculating busyness: group 10 teams by frequency, rate 0-1 on each team. Weight 0.3 on pickup action, 0.7 on drop off action.
+                                      taxi_busyness=group rate*(1/volume_count)----->rescale it between 0 and 1----->0 means most chaos, not recommond; 
+                                                                                                                               1 means most quit, recommond.
