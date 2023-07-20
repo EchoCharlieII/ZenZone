@@ -68,7 +68,8 @@ def my_view_function(request):
             # Generate a response JSON
             response_data = {
                 'message': 'Data received successfully',
-                'received_data': data
+                'received_data': data,
+                'statement_from_backend': 'This is a test to get the response'
             }
             return JsonResponse(response_data)
         except json.JSONDecodeError:

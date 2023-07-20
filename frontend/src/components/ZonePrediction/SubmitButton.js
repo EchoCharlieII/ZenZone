@@ -7,12 +7,12 @@ const SubmitButton = ({ selectedDate }) => {
         ApiService.submitDate(selectedDate)
           .then((response) => {
             // Handle the response from the backend
-            console.log('Response:', response);
+            // console.log('Response:', response);
             // Add any further actions or state updates here
           })
           .catch((error) => {
             // Handle any errors
-            console.error('Error:', error);
+            // console.error('Error:', error);
           });
       } else {
         console.log('No date selected');
