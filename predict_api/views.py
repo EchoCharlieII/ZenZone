@@ -57,9 +57,11 @@ def predict_by_id(request):
 @csrf_exempt
 def my_view_function(request):
     if request.method == 'POST':
-        print('Test')
         try:
             data = json.loads(request.body)
+            print('Data type recieved:', type(data))
+            print('Data Format:', data)
+        
             # Process the JSON data as needed
             # For example, you can access specific values using data['key']
             
@@ -68,7 +70,6 @@ def my_view_function(request):
                 'message': 'Data received successfully',
                 'received_data': data
             }
-            print('Testing 2')
             return JsonResponse(response_data)
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON data'}, status=400)

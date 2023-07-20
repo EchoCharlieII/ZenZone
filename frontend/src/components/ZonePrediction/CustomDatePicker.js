@@ -10,15 +10,24 @@ const CustomDatePicker = ({onDateChange}) => {
     onDateChange(date); // Call the onDateChange prop
   };
 
+  const formatSelectedDate = (date) => {
+    if (date) {
+      const startOfDay = new Date(date);
+      startOfDay.setHours(0, 0, 0, 0);
+      return startOfDay.toISOString().slice(0, 10);
+    }
+    return 'None';
+  };
+
   return (
     <div>
       <h2>Select a Date:</h2>
       <DatePicker
-        selected={selectedDate}
+        selected={selectedDate} 
         onChange={handleDateChange}
         dateFormat="yyyy-MM-dd"
       />
-      <p>Selected Date: {selectedDate ? selectedDate.toISOString().slice(0, 10) : 'None'}</p>
+      <p>Selected Date: {formatSelectedDate(selectedDate)}</p>
     </div>
   );
 };
