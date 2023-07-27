@@ -10,14 +10,15 @@ const ApiService = {
     submitDate: async (date) => {
         try {
             // Generating the POST request to the backend
-            const response = await axios.post('http://localhost:8000/predict-api/predict-by-id', { date });
+            const response = await axios.post('http://localhost:8000/predict-api/dummy_test', { date });
             // Handle the response from the backend
-            console.log('Response:', response.data);
+            console.log('Response:', response.data['received_data']);
             return response.data;
           } catch (error) {
             // Handle any errors
             console.error('Error:', error);
             throw error;
+            // New Change
           }
     },
 };

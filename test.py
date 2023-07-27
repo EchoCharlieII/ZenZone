@@ -1,7 +1,11 @@
+import json
 from _datetime import datetime, timedelta
 import pickle
 import requests
 import psycopg2
+
+from constants import MODLE_ID_RANGE
+from utils import get_model
 
 # modelId = 4
 # modelName = './predictions/models/model-' + str(modelId) + '.pkl'
@@ -11,9 +15,11 @@ import psycopg2
 # predicted = model.predict([[11, 1, 100]])
 # print(predicted)
 # date = datetime.now()
+# print(date)
 # print(date.month)
 # print(date.weekday())
 # formatted_date = date.strftime('%Y-%m-%dT%H:%M:%S')
+# print(formatted_date)
 #
 # print(date)
 #
@@ -34,20 +40,42 @@ import psycopg2
 #
 # print(wkt_polygon)
 
-api_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
-location = "40.7128,-74.0060"  # Example: New York City coordinates
-radius = 1000  # Example: 1 kilometer radius
-types = "restaurant"  # Example: only retrieve restaurants
-api_key = "AIzaSyBZO63KhZ_rj2j4ldsaCSVqOhtAKV5GgEY"  # Replace with your API key
+# api_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
+# location = "40.7128,-74.0060"  # Example: New York City coordinates
+# radius = 1000  # Example: 1 kilometer radius
+# types = "restaurant"  # Example: only retrieve restaurants
+# api_key = "AIzaSyBZO63KhZ_rj2j4ldsaCSVqOhtAKV5GgEY"  # Replace with your API key
+#
+# params = {
+#     "location": location,
+#     "radius": radius,
+#     "types": types,
+#     "key": api_key
+# }
+#
+# response = requests.get(api_url, params=params)
+# data = response.json()
+#
+# print(data)
 
-params = {
-    "location": location,
-    "radius": radius,
-    "types": types,
-    "key": api_key
-}
+input_string = "2023-07-19 15:30:00"
 
-response = requests.get(api_url, params=params)
-data = response.json()
+# Define the format of your input string
+# The format should match the structure of your input string
+import pandas as pd
+predictions = []
 
-print(data)
+for id in MODLE_ID_RANGE:
+    model = get_model.get_model_by_id(id)
+    predict_result = model.predict([[11, 1, 123]])[0]
+    predictions.append({'Taxi_Zone_ID': id, 'calm rate': predict_result})
+
+df_street_busyness = pd.read_parquet('predictions/street_zones_factor.parquet')
+df_predictions = pd.DataFrame(predictions)
+result = pd.merge(df_predictions, df_street_busyness, how='left', on='Taxi_Zone_ID')
+result['street_calm_rate'] = 1 - (1 - result['calm rate']) * result['highway_factor']
+result = result[['Taxi_Zone_ID', 'geometry', 'street_calm_rate']]
+result_json = result.to_json(orient='records')
+
+# return render data
+print(result)
