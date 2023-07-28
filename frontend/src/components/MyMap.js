@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer } from 'react-leaflet';
+import { MapContainer, TileLayer, Polyline } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-// import Loading from './PageLoading/loading';
+import Loading from './PageLoading/loading';
 
 
 
@@ -15,6 +15,32 @@ function MyMap({ mapData }) {
   //const [isLoading, setLoading] = useState(true);
 
   console.log("Received Map Data:", mapData);
+
+  // Function to parse the LINESTRING coordinates
+  const parseCoordinates = (lineString) => {
+    // Assuming lineString is in the format: 'LINESTRING (lon1 lat1, lon2 lat2, ...)'
+    const coordinatesString = lineString.replace('LINESTRING (', '').replace(')', '');
+    const coordinatesArray = coordinatesString.split(',').map((coord) => {
+      const [lon, lat] = coord.trim().split(' ');
+      return [parseFloat(lat), parseFloat(lon)];
+    });
+    return coordinatesArray;
+  };
+
+
+
+  // Function to calculate the color based on street_calm_rate
+  const getColor = (streetCalmRate) => {
+  const red = Math.round(255 * (1 - streetCalmRate));
+  const green = Math.round(255 * streetCalmRate);
+  const blue = 0; // You can set this to any constant value for now
+  return `rgb(${red}, ${green}, ${blue})`;
+  };
+
+
+
+  // Limit the number of objects to render on the map (80,000 in this case)
+  const limitedMapData = mapData.slice(0, 80000);
 
 
 
@@ -39,6 +65,15 @@ function MyMap({ mapData }) {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution="Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors"
           />
+
+          {limitedMapData.map((item, index) => {
+            const coordinates = parseCoordinates(item.geometry);
+            const streetCalmRate = item.street_calm_rate;
+            const color = getColor(streetCalmRate);
+
+            
+            return <Polyline key={index} positions={coordinates} color={color} />;
+          })}
           
         </MapContainer>
       {/*})} */}
