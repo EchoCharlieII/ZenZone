@@ -10,7 +10,6 @@ function App() {
     return (
         <div>
             <Router>
-                <Navbar />
                 <Routes>
                     <Route exact path='/' element={<Home />} /> 
                     {/* Yi debug record */}
