@@ -245,7 +245,7 @@
   transition: background 0.3s ease, color 0.3s ease;
   visibility: hidden;
   animation: fadeInVisibility 2s ease-in-out forwards;
-  animation-delay: 7.5s;
+  animation-delay: 8.2s;
 }
 
 @keyframes fadeInVisibility {
