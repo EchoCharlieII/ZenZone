@@ -4,11 +4,10 @@ import 'leaflet/dist/leaflet.css';
 import Loading from './PageLoading/loading';
 
 
-
-
-
-
 function MyMap({ mapData }) {
+
+  // Log the mapData prop for debugging
+  console.log("mapData prop in MyMap component:", mapData);
 
   // Setting the Center Coordinates for New York City
   const centerCoordinates = [40.725, -74.0060];
@@ -27,8 +26,6 @@ function MyMap({ mapData }) {
     return coordinatesArray;
   };
 
-
-
   // Function to calculate the color based on street_calm_rate
   const getColor = (streetCalmRate) => {
   const red = Math.round(255 * (1 - streetCalmRate));
@@ -37,46 +34,29 @@ function MyMap({ mapData }) {
   return `rgb(${red}, ${green}, ${blue})`;
   };
 
-
-
   // Limit the number of objects to render on the map (80,000 in this case)
   const limitedMapData = mapData.slice(0, 80000);
 
-
-
-
-
-
-  
-  
-
   return (
-    <div>
-      {/*{isLoading ? (
-        <Loading />
-      ) : (*/}
-      
-        <MapContainer
-          center={centerCoordinates}
-          zoom={13}
-          style={{ minHeight: '400px', width: '100%' }}
-        >
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution="Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors"
-          />
+    <div style={{ width: '100%', height: '100%' }}>
+      <MapContainer
+        center={centerCoordinates}
+        zoom={13}
+        style={{ width: '100%', height: '100%' }}
+      >
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution="Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors"
+        />
+        
+        {limitedMapData.map((item, index) => {
+          const coordinates = parseCoordinates(item.geometry);
+          const streetCalmRate = item.street_calm_rate;
+          const color = getColor(streetCalmRate);
 
-          {limitedMapData.map((item, index) => {
-            const coordinates = parseCoordinates(item.geometry);
-            const streetCalmRate = item.street_calm_rate;
-            const color = getColor(streetCalmRate);
-
-            
-            return <Polyline key={index} positions={coordinates} color={color} />;
-          })}
-          
-        </MapContainer>
-      {/*})} */}
+          return <Polyline key={index} positions={coordinates} color={color} />;
+        })} 
+      </MapContainer>
     </div>
   );
 }

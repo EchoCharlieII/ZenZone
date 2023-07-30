@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import CustomDatePicker from './CustomDatePicker';
 import SubmitButton from './SubmitButton';
 import ApiService from '../../services/ApiService';
+import './DateSelector.css';
 
 const DateSelector = ({ onDateSubmit }) => {
   const [selectedDate, setSelectedDate] = useState(null);
