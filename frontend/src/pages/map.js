@@ -18,10 +18,16 @@ const Map = () => {
         setSidebarOpen(!isSidebarOpen);
     };
 
+    const [route, setRoute] = useState([]);
+
+    const onLocationsSelected = (startLocation, endLocation) => {
+        setRoute([startLocation, endLocation]);
+    };
+
     return (
         <div className="container">
-            <Sidebar isOpen={isSidebarOpen} toggle={toggleSidebar} />
-            <MyMap className="main-map" mapData={mapData}/>
+            <Sidebar onLocationsSelected={onLocationsSelected} isOpen={isSidebarOpen} toggle={toggleSidebar} />
+            <MyMap className="main-map" mapData={mapData} route={route} />
         </div>
     );
 };

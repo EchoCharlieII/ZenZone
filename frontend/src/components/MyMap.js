@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import Loading from './PageLoading/loading';
 
 
-function MyMap({ mapData }) {
+function MyMap({ mapData, route }) {
 
   // Log the mapData prop for debugging
   console.log("mapData prop in MyMap component:", mapData);
@@ -48,7 +48,8 @@ function MyMap({ mapData }) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution="Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors"
         />
-        
+        <Polyline positions={route} color="blue" />
+
         {limitedMapData.map((item, index) => {
           const coordinates = parseCoordinates(item.geometry);
           const streetCalmRate = item.street_calm_rate;
