@@ -10,7 +10,7 @@ function MyMap({ mapData, route }) {
   console.log("mapData prop in MyMap component:", mapData);
 
   // Setting the Center Coordinates for New York City
-  const centerCoordinates = [40.725, -74.0060];
+  const centerCoordinates = [40.7484, -73.9857];
   //const [isLoading, setLoading] = useState(true);
 
   console.log("Received Map Data:", mapData);
