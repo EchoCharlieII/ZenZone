@@ -188,9 +188,10 @@ function Sidebar({ onLocationsSelected }) {
               theme={{
                 suggestionsList: {
                   listStyleType: 'none', // Removes bullet points
+                  marginLeft: '-35px'
                 },
                 suggestion: {
-                  fontSize: '14px', // Sets font size to 14px
+                  fontSize: '13px', // Sets font size to 14px
                 }
               }}
             />
