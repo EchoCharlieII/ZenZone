@@ -1,46 +1,265 @@
-@keyframes fallingLeavesAnimation {
-    0% {
-      transform: translateY(-100%);
-    }
-    100% {
-      transform: translateY(100%);
-    }
+#section1 {
+  background-image: url('./imgs/pexels-marta-wave-5876672.jpg');
+  opacity: 0;
+  animation: fadeIn ease 2s;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  z-index: 2;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
   }
-  
-  .home-container {
-    position: relative;
-    height: 100vh;
-    overflow: hidden;
+  100% {
+    opacity: 1;
   }
-  
-  .animated-background {
-    position: absolute;
-    top: 0;
-    left: 0;
+}
+
+#section2 {
+  background-image: url('./imgs/pexels-marta-wave-5876680.jpg');
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+}
+
+/* body {
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+} */
+
+.home-title {
+  position: absolute;
+  font-family: 'Pacifico', cursive;
+  font-size: 65px;
+  line-height: 1.5;
+  color: aliceblue;
+  text-shadow: -1px -1px 0 #000000,  
+               1px -1px 0 #000000,
+               -1px 1px 0 #000000,
+               1px 1px 0 #000000;
+  text-align: center;
+  left: 0;
+  right: 0;
+  animation: home-title 4s forwards;
+}
+
+@keyframes home-title {
+  0% {
+    transform: translateY(0%);
+  }
+  100% {
+    transform: translateY(200%);
+  }
+}
+
+.home-description {
+  font-family: 'Roboto Slab', serif;
+  color: aliceblue;
+  text-shadow: -1px -1px 0 #000000,  
+               1px -1px 0 #000000,
+               -1px 1px 0 #000000,
+               1px 1px 0 #000000;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 0;
+  animation: type-text 5s steps(40, end) forwards, cursor-blink 1s infinite;
+  animation-delay: 4s;
+  text-align: center;
+  margin: auto;
+  position: absolute;
+  top: 52%;
+  left: 0;
+  right: 0;
+}
+
+@keyframes type-text {
+  0% {
+    width: 0;
+  }
+  100% {
     width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #5ea55e, #6fbf6f, #4d944d);
-    background-size: 200% 200%;
-    animation: backgroundAnimation 10s ease infinite;
   }
-  
-  /* .falling-leaves {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('/path/to/falling-leaves.png');
-    background-size: contain;
-    animation: fallingLeavesAnimation 10s linear infinite;
-  } */
-  
-  .content {
-    position: relative;
-    z-index: 1;
-    text-align: center;
-    margin-top: 50px;
+}
+
+@keyframes cursor-blink {
+  0%, 100% {
+    border-right-color: transparent;
   }
-  
-  /* Rest of the existing styles for home-title, home-description, home-image, and home-button */
-  
+  50% {
+    border-right-color: inherit;
+  }
+}
+
+#mouse-scroll {
+  position: fixed;
+  margin: auto;
+  left: 50%;
+  bottom: 25px;
+  z-index: 10;
+  opacity: 0;
+  animation: show-scroll-icon 2s forwards;
+  animation-delay: 7s;
+  transition: opacity 1s ease-out;
+}
+
+@keyframes show-scroll-icon {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+#mouse-scroll span{
+  display: block;
+  width: 5px; 
+  height: 5px;
+  transform: rotate(45deg);
+  border-right: 2px solid #ffffff; 
+  border-bottom: 2px solid #ffffff;
+  margin: 0 0 3px 5px;
+}
+
+#mouse-scroll .mouse {
+  height: 21px;
+  width: 14px;
+  border-radius: 10px;
+  transform: none;
+  border: 2px solid #ffffff;
+  top: 170px;
+}
+
+#mouse-scroll .down-arrow-1, 
+#mouse-scroll .down-arrow-2, 
+#mouse-scroll .down-arrow-3 {
+  animation: mouse-scroll 2s infinite;
+  animation-direction: alternate;
+}
+
+
+#mouse-croll .down-arrow-1 {
+   animation-delay: .2s;
+}
+
+#mouse-scroll .down-arrow-2 {
+  animation-delay: .4s;
+}
+
+#mouse-scroll .down-arrow-3 {
+   animation-delay: .6s;
+}
+
+#mouse-scroll .mouse-in {
+  height: 5px;
+  width: 2px;
+  display: block; 
+  margin: 5px auto;
+  background: #ffffff;
+  position: relative;
+  animation: animated-mouse 1.2s ease infinite;
+}
+
+@keyframes animated-mouse {
+  0%, 100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@keyframes mouse-scroll {
+  0%, 100% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.section2-description {
+  font-family: 'Roboto Slab', serif;
+  color: aliceblue;
+  text-shadow: -1px -1px 0 #000000,  
+               1px -1px 0 #000000,
+               -1px 1px 0 #000000,
+               1px 1px 0 #000000;
+  text-align: center;
+  margin: auto;
+  position: absolute;
+  left: 0;
+  right: 0;
+  opacity: 0;
+}
+
+.line1, .line2, .line3 {
+  animation: fadeIn 0.5s ease-in-out forwards;
+  animation-play-state: paused;
+}
+
+.line1 {
+  animation-delay: 0s;
+  top: 40%;
+}
+
+.line2 {
+  animation-delay: 2.1s;
+  top: 45%;
+}
+
+.line3 {
+  animation-delay: 4.2s;
+  top: 50%;
+}
+
+.home-button {
+  z-index: 20;
+  font-family: 'Roboto Slab', serif;
+  background: transparent;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  padding: 10px 20px;
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  font-size: 1.2em;
+  transition: background 0.3s ease, color 0.3s ease;
+  visibility: hidden;
+  animation: fadeInVisibility 2s ease-in-out forwards;
+  animation-delay: 8.2s;
+}
+
+@keyframes fadeInVisibility {
+  0% {
+    visibility: hidden;
+  }
+  100% {
+    visibility: visible;
+  }
+}
+
+.home-button:hover {
+  background-color: #ffffff;
+  color: #000000;
+  border-color: #000000;
+  transition: 0.7s;
+}

@@ -1,24 +1,27 @@
-// This is where the information about the backend server will be held
-// At the moment, it just contains placeholder values
 
-// We are using Axios as the library to make HTTP requests to the Backend
+
 import axios from 'axios';
 
 
-
 const ApiService = {
+
     submitDate: async (date) => {
         try {
             // Generating the POST request to the backend
-            const response = await axios.post('http://localhost:8000/predict-api/dummy_test', { date });
-            // Handle the response from the backend
-            console.log('Response:', response.data['received_data']);
-            return response.data;
+            const response = await axios.post('http://localhost:8000/map-api/render-map', { date });
+              console.log("Data:", response.data);
+
+              const firstObject = response.data[0];
+
+              console.log("First Object:", JSON.stringify(firstObject));
+            
+
+            
+              return response;
           } catch (error) {
             // Handle any errors
             console.error('Error:', error);
             throw error;
-            // New Change
           }
     },
 };

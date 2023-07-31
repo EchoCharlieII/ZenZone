@@ -1,143 +1,65 @@
-// This component will be used to render the map
-
 import React, { useEffect, useState } from 'react';
-import {MapContainer, TileLayer, Polyline} from 'react-leaflet';
+import { MapContainer, TileLayer, Polyline } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-
-// Importing the Loading Component
 import Loading from './PageLoading/loading';
 
 
-// Importing the CSV parser function
-import { parseCSVData } from './csvParser';
-import predictionsCSV from '../data/predictions.csv';
+function MyMap({ mapData, route }) {
 
-function MyMap() {
+  // Log the mapData prop for debugging
+  console.log("mapData prop in MyMap component:", mapData);
 
-    // Setting the coordinates for the center of NYC
-    const centerCoordinates = [40.725, -74.0060];
-    const [polylines, setPolylines] = useState([]);
+  // Setting the Center Coordinates for New York City
+  const centerCoordinates = [40.7484, -73.9857];
+  //const [isLoading, setLoading] = useState(true);
 
+  console.log("Received Map Data:", mapData);
 
-    // Setting the state for the Loading Screen
-    const[isLoading, setLoading] = useState(true);
+  // Function to parse the LINESTRING coordinates
+  const parseCoordinates = (lineString) => {
+    // Assuming lineString is in the format: 'LINESTRING (lon1 lat1, lon2 lat2, ...)'
+    const coordinatesString = lineString.replace('LINESTRING (', '').replace(')', '');
+    const coordinatesArray = coordinatesString.split(',').map((coord) => {
+      const [lon, lat] = coord.trim().split(' ');
+      return [parseFloat(lat), parseFloat(lon)];
+    });
+    return coordinatesArray;
+  };
 
+  // Function to calculate the color based on street_calm_rate
+  const getColor = (streetCalmRate) => {
+  const red = Math.round(255 * (1 - streetCalmRate));
+  const green = Math.round(255 * streetCalmRate);
+  const blue = 0; // You can set this to any constant value for now
+  return `rgb(${red}, ${green}, ${blue})`;
+  };
 
-    const [selectedDate, setSelectedDate] = useState('');
+  // Limit the number of objects to render on the map (80,000 in this case)
+  const limitedMapData = mapData.slice(0, 80000);
 
-    const handleDateChange = (event) => {
-        setSelectedDate(event.target.value);
-      };
+  return (
+    <div style={{ width: '100%', height: '100%' }}>
+      <MapContainer
+        center={centerCoordinates}
+        zoom={13}
+        style={{ width: '100%', height: '100%' }}
+      >
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution="Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors"
+        />
+        <Polyline positions={route} color="blue" />
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        // Here you can send the selectedDate value to the backend using JSON format
-        // You can make an HTTP request or invoke a function that handles the data submission
-        console.log(selectedDate);
-    };
+        {limitedMapData.map((item, index) => {
+          const coordinates = parseCoordinates(item.geometry);
+          const streetCalmRate = item.street_calm_rate;
+          const color = getColor(streetCalmRate);
 
-
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(predictionsCSV);
-                const csvData = await response.text();
-                const parsedData = await parseCSVData(csvData);
-                // Process the parsed CSV data
-                console.log(parsedData);
-                // Update the polylines state with the LINESTRING coordinates
-                const limitedPolylines = parsedData 
-                    .filter(item => item.geometry && item.street_calm_rate !== undefined)
-                    .map(item => ({
-                        geometry: item.geometry,
-                        street_calm_rate: parseFloat(item.street_calm_rate),
-                    }))
-                    .slice(0,30000); // Limiting the number of streets to 30000
-                setPolylines(limitedPolylines);
-                setLoading(false) // Set loading state to false when render is complete
-            } catch (error) {
-                console.error('Error parsing CSV:', error);
-            }
-        };
-
-        fetchData();
-    }, []);
-
-    const getLineColour = (streetCalmRate) => {
-        // Calculate the colour of the street based on the calm rate
-        const red = Math.round(255 * (1 - streetCalmRate));
-        const green = Math.round(255 * streetCalmRate);
-        return `rgb(${red}, ${green}, 0)`;
-    };
-
-
-    return (
-        <div>
-            {isLoading ? ( // Conditional rendering of loading screen
-                <Loading />
-            ) : (
-                <MapContainer
-            center={centerCoordinates}
-            zoom={13}
-            style={{minHeight: '400px', width:'100%'}}
-        >
-            {/* I'm not too sure what this part is useful for yet */}
-            <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution="Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors"
-            />
-
-
-            {polylines.map((lineString, index) => (
-                <Polyline
-                    key={index}
-                    positions={parseLineStringCoordinates(lineString.geometry)}
-                    color={getLineColour(lineString.street_calm_rate)} // Set to color of the polyline
-                />
-            ))}
-
-
-            {/* Date Selection Form */}
-        <div>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Select a date:
-                <input
-                    type="date"
-                    value={selectedDate}
-                    onChange={handleDateChange}
-                />
-                </label>
-                    <button type="submit">Submit</button>
-            </form>
-        </div>
-
-        </MapContainer>
-            )}
-        </div>
-
-    );
+          return <Polyline key={index} positions={coordinates} color={color} />;
+        })} 
+      </MapContainer>
+    </div>
+  );
 }
-
-// Helper function to parse LINESTRING coordinates
-function parseLineStringCoordinates(lineString) {
-    try {
-      const coordinateString = lineString.replace('LINESTRING (', '').replace(')', '');
-      const coordinates = coordinateString.split(',').map(coord => {
-        const [lng, lat] = coord.trim().split(' ');
-        const parsedLat = parseFloat(lat);
-        const parsedLng = parseFloat(lng);
-        if (isNaN(parsedLat) || isNaN(parsedLng)) {
-          throw new Error('Invalid coordinates');
-        }
-        return [parsedLat, parsedLng];
-      });
-      return coordinates;
-    } catch (error) {
-      console.error('Error parsing LINESTRING coordinates:', error);
-      return [];
-    }
-  }
 
 export default MyMap;
