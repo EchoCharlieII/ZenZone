@@ -149,59 +149,68 @@ function Sidebar({ onLocationsSelected, setMapData }) {
         width={isSidebarOpen ? '380px' : '80px'}
       >
         <Menu>
-        <MenuItem onClick={toggleSidebar} icon={<MenuOutlinedIcon />}>
-          <img src={logo} alt="Logo" style={{ width: '150px', marginTop: '5px' }} />
-        </MenuItem>
-        <MenuItem
-          onClick={isSidebarOpen ? toggleDateSelector : undefined}
-          icon={<RouteOutlinedIcon />}
-        >
-          Route Planner
-        </MenuItem>
+          <MenuItem onClick={toggleSidebar} icon={<MenuOutlinedIcon />}>
+            <img src={logo} alt="Logo" style={{ width: '150px', marginTop: '5px' }} />
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              if (!isSidebarOpen) toggleSidebar();
+              toggleDateSelector();
+            }}
+            icon={<RouteOutlinedIcon />}
+          >
+            Route Planner
+          </MenuItem>
 
-        {showDateSelector && (
-          <div className="autosuggest-form">
-            <Autosuggest
-              suggestions={suggestions}
-              onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-              onSuggestionsClearRequested={onSuggestionsClearRequested}
-              getSuggestionValue={getSuggestionValue}
-              renderSuggestion={renderSuggestion}
-              inputProps={inputProps}
-              onSuggestionSelected={onSuggestionSelected}
-              theme={{
-                suggestionsList: {
-                  listStyleType: 'none', // Removes bullet points
-                },
-                suggestion: {
-                  fontSize: '14px', // Sets font size to 14px
-                }
-              }}
-            />
-            <Autosuggest
-              suggestions={suggestionsDestination}
-              onSuggestionsFetchRequested={onSuggestionsFetchRequestedDestination}
-              onSuggestionsClearRequested={onSuggestionsClearRequestedDestination}
-              getSuggestionValue={getSuggestionValueDestination}
-              renderSuggestion={renderSuggestionDestination}
-              inputProps={inputPropsDestination}
-              onSuggestionSelected={onSuggestionSelectedDestination}
-              theme={{
-                suggestionsList: {
-                  listStyleType: 'none', // Removes bullet points
-                  marginLeft: '-35px'
-                },
-                suggestion: {
-                  fontSize: '13px', // Sets font size to 14px
-                }
-              }}
-            />
-            <div className="date-selector-container">
-              <DateSelector onDateSubmit={setMapData}/>
+          {showDateSelector && (
+            <div className="autosuggest-form">
+              <Autosuggest
+                suggestions={suggestions}
+                onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+                onSuggestionsClearRequested={onSuggestionsClearRequested}
+                getSuggestionValue={getSuggestionValue}
+                renderSuggestion={renderSuggestion}
+                inputProps={inputProps}
+                onSuggestionSelected={onSuggestionSelected}
+                theme={{
+                  suggestionsList: {
+                    listStyleType: 'none', // Removes bullet points
+                  },
+                  suggestion: {
+                    fontSize: '14px', // Sets font size to 14px
+                  }
+                }}
+              />
+              <Autosuggest
+                suggestions={suggestionsDestination}
+                onSuggestionsFetchRequested={onSuggestionsFetchRequestedDestination}
+                onSuggestionsClearRequested={onSuggestionsClearRequestedDestination}
+                getSuggestionValue={getSuggestionValueDestination}
+                renderSuggestion={renderSuggestionDestination}
+                inputProps={inputPropsDestination}
+                onSuggestionSelected={onSuggestionSelectedDestination}
+                theme={{
+                  suggestionsList: {
+                    listStyleType: 'none', // Removes bullet points
+                    marginLeft: '-35px'
+                  },
+                  suggestion: {
+                    fontSize: '13px', // Sets font size to 14px
+                  }
+                }}
+              />
+              <div className="date-selector-container">
+                <DateSelector onDateSubmit={setMapData}/>
+              </div>
             </div>
-          </div>
-        )}
-          <MenuItem onClick={toggleGemItems} icon={<DiamondOutlinedIcon />}>
+          )}
+          <MenuItem 
+            onClick={() => {
+              if (!isSidebarOpen) toggleSidebar();
+              toggleGemItems();
+            }} 
+            icon={<DiamondOutlinedIcon />}
+          >
             Hidden Gems
           </MenuItem>
           {showGemItems && (
