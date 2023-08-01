@@ -19,7 +19,11 @@ const CustomDatePicker = ({onDateChange}) => {
       <DatePicker
         selected={selectedDate} 
         onChange={handleDateChange}
-        dateFormat="yyyy-MM-dd"
+        showTimeSelect
+        timeFormat="HH:mm"
+        timeIntervals={15}
+        dateFormat="yyyy-MM-dd h:mm aa"
+        timeCaption="time"
       />
     </div>
   );
