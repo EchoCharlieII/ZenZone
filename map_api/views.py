@@ -36,7 +36,8 @@ def render_map(request):
             predict_result = model.predict([[temp, month, time_of_week]])[0]
             predictions.append({'Taxi_Zone_ID': id, 'calm rate': predict_result})
 
-        df_street_busyness = pd.read_parquet('predictions/street_zones_factor.parquet')
+        # Test simplified data: (street_zones_factor_simplified.parquet instead of street_zones_factor.parquet)
+        df_street_busyness = pd.read_parquet('predictions/street_zones_factor_simplified.parquet')
         df_predictions = pd.DataFrame(predictions)
         result = pd.merge(df_predictions, df_street_busyness, how='left', on='Taxi_Zone_ID')
         result['street_calm_rate'] = 1 - (1 - result['calm rate']) * result['highway_factor']
