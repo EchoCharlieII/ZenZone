@@ -1,58 +1,41 @@
 import React, {useState, useEffect} from "react";
 import MyMap from '../components/MyMap';
-import DateSelector from "../components/DateSelector/DateSelector";
+import Sidebar from '../components/Sidebar';
+import './Map.css';
 
 // Importing the component for the loading screen
 //import Loading from "../components/PageLoading/loading";
 
 // Holding the data sent from the backend, initially set to an empty array
-
-
  
 const Map = () => {
 
-
-
     // Holding the data sent from the backend, initially set to an empty array
     const [mapData, setMapData] = useState([]);
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
 
-
-
-    const [mode, setMode] = useState('prediction'); // 'prediction' or 'route'
-
-
-
-
-
+    const toggleSidebar = () => {
+        setSidebarOpen(!isSidebarOpen);
+    };
 
 
 
 
 
+    const [route, setRoute] = useState([]);
 
 
 
 
 
+    const onLocationsSelected = (startLocation, endLocation) => {
+        setRoute([startLocation, endLocation]);
+    };
 
-    
     return (
-        <div>
-            <h1>Please Select An Option Below</h1>
-            <button onClick={() => setMode('prediction')}>Busyness Prediction</button>
-            <button onClick={() => setMode('route')}>Route Planner</button>
-            {mode === 'prediction' ? (
-                <>
-                    <h1>Prediction Mode</h1>
-                    <MyMap mapData={mapData} />
-                    <DateSelector onDateSubmit={setMapData} />
-                </>
-            ) : (
-                <>
-                    <h1>Routing Mode</h1>
-                    <MyMap mapData={mapData} />
-                </>
-            )}
+        <div className="container">
+            <Sidebar onLocationsSelected={onLocationsSelected} isOpen={isSidebarOpen} toggle={toggleSidebar} />
+            <MyMap className="main-map" mapData={mapData} route={route} />
         </div>
     );
 };

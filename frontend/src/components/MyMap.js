@@ -4,14 +4,13 @@ import 'leaflet/dist/leaflet.css';
 import Loading from './PageLoading/loading';
 
 
+function MyMap({ mapData, route }) {
 
-
-
-
-function MyMap({ mapData }) {
+  // Log the mapData prop for debugging
+  console.log("mapData prop in MyMap component:", mapData);
 
   // Setting the Center Coordinates for New York City
-  const centerCoordinates = [40.725, -74.0060];
+  const centerCoordinates = [40.7484, -73.9857];
   //const [isLoading, setLoading] = useState(true);
 
   console.log("Received Map Data:", mapData);
@@ -75,20 +74,17 @@ function MyMap({ mapData }) {
   
   
   return (
-    <div>
-      {/*{isLoading ? (
-        <Loading />
-      ) : (*/}
-      
-        <MapContainer
-          center={centerCoordinates}
-          zoom={13}
-          style={{ minHeight: '400px', width: '100%' }}
-        >
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution="Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors"
-          />
+    <div style={{ width: '100%', height: '100%' }}>
+      <MapContainer
+        center={centerCoordinates}
+        zoom={13}
+        style={{ width: '100%', height: '100%' }}
+      >
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution="Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors"
+        />
+        <Polyline positions={route} color="blue" />
 
           {/* Render Starting Marker */}
           {startingCoordinate && (
@@ -115,12 +111,9 @@ function MyMap({ mapData }) {
             const streetCalmRate = item.street_calm_rate;
             const color = getColor(streetCalmRate);
 
-            
-            return <Polyline key={index} positions={coordinates} color={color} />;
-          })}
-          
-        </MapContainer>
-      {/*})} */}
+          return <Polyline key={index} positions={coordinates} color={color} />;
+        })} 
+      </MapContainer>
     </div>
   );
 }
