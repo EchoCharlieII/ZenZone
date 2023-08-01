@@ -13,7 +13,7 @@ import '../pages/Map.css';
 import opencage from 'opencage-api-client';
 import Autosuggest from 'react-autosuggest';
 
-function Sidebar({ onLocationsSelected }) {
+function Sidebar({ onLocationsSelected, setMapData }) {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [showDateSelector, setShowDateSelector] = useState(false);
   const [showGemItems, setShowGemItems] = useState(false);
@@ -139,6 +139,7 @@ function Sidebar({ onLocationsSelected }) {
     }
   }, [startLocation, endLocation, onLocationsSelected]);
 
+  
 
   return (
     <div id="app">
@@ -196,7 +197,7 @@ function Sidebar({ onLocationsSelected }) {
               }}
             />
             <div className="date-selector-container">
-              <DateSelector />
+              <DateSelector onDateSubmit={setMapData}/>
             </div>
           </div>
         )}
