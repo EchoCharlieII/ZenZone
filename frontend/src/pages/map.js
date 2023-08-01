@@ -18,6 +18,11 @@ const Map = () => {
 
 
 
+    const [mode, setMode] = useState('prediction'); // 'prediction' or 'route'
+
+
+
+
 
 
 
@@ -33,11 +38,21 @@ const Map = () => {
     
     return (
         <div>
-            <h1>This is the page for the Map.</h1>
-            <MyMap mapData={mapData}/>
-            <h1>nada</h1>
-            <h1>nada</h1>
-            <DateSelector onDateSubmit={setMapData}/>
+            <h1>Please Select An Option Below</h1>
+            <button onClick={() => setMode('prediction')}>Busyness Prediction</button>
+            <button onClick={() => setMode('route')}>Route Planner</button>
+            {mode === 'prediction' ? (
+                <>
+                    <h1>Prediction Mode</h1>
+                    <MyMap mapData={mapData} />
+                    <DateSelector onDateSubmit={setMapData} />
+                </>
+            ) : (
+                <>
+                    <h1>Routing Mode</h1>
+                    <MyMap mapData={mapData} />
+                </>
+            )}
         </div>
     );
 };
