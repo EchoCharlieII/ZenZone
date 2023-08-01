@@ -26,7 +26,7 @@ const Map = () => {
 
     return (
         <div className="container">
-            <Sidebar onLocationsSelected={onLocationsSelected} isOpen={isSidebarOpen} toggle={toggleSidebar} />
+            <Sidebar onLocationsSelected={onLocationsSelected} isOpen={isSidebarOpen} toggle={toggleSidebar} setMapData={setMapData}/>
             <MyMap className="main-map" mapData={mapData} route={route} />
         </div>
     );
