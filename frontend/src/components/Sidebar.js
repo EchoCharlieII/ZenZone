@@ -127,10 +127,8 @@ function Sidebar({ onLocationsSelected, setMapData }) {
   };
 
   const toggleGemItems = () => {
-    if (isSidebarOpen) {
-      setShowGemItems(!showGemItems);
-    }
-  };
+    setShowGemItems(!showGemItems);
+  };  
 
   useEffect(() => {
     if (startLocation && endLocation) {
@@ -206,8 +204,10 @@ function Sidebar({ onLocationsSelected, setMapData }) {
           )}
           <MenuItem 
             onClick={() => {
-              if (!isSidebarOpen) toggleSidebar();
               toggleGemItems();
+              if (!isSidebarOpen) {
+                toggleSidebar();
+              }
             }} 
             icon={<DiamondOutlinedIcon />}
           >
