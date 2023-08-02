@@ -4,7 +4,7 @@ import SubmitButton from "./SubmitButton";
 import ApiService from "../../services/ApiService";
 import "./DateSelector.css";
 
-const DateSelector = ({ onDateSubmit }) => {
+export default function DateSelector({ onDateSubmit }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [mapData, setMapData] = useState([]);
 
@@ -33,6 +33,4 @@ const DateSelector = ({ onDateSubmit }) => {
       <SubmitButton onSubmit={handleSubmit} selectedDate={selectedDate} />
     </div>
   );
-};
-
-export default DateSelector;
+}

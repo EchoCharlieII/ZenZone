@@ -13,7 +13,7 @@ import "../pages/Map.css";
 import opencage from "opencage-api-client";
 import Autosuggest from "react-autosuggest";
 
-function Sidebar({ onLocationsSelected, setMapData }) {
+export default function Sidebar({ onLocationsSelected, setMapData }) {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [showDateSelector, setShowDateSelector] = useState(false);
   const [showGemItems, setShowGemItems] = useState(false);
@@ -162,6 +162,7 @@ function Sidebar({ onLocationsSelected, setMapData }) {
 
           {showDateSelector && (
             <div className="autosuggest-form">
+              <p style={{ fontSize: "16px" }}>Select starting and ending points:</p>
               <Autosuggest
                 suggestions={suggestions}
                 onSuggestionsFetchRequested={onSuggestionsFetchRequested}
@@ -237,5 +238,3 @@ function Sidebar({ onLocationsSelected, setMapData }) {
     </div>
   );
 }
-
-export default Sidebar;

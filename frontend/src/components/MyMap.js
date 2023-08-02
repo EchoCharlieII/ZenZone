@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Polyline } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import Loading from "./PageLoading/loading";
 
-function MyMap({ mapData, route }) {
+export default function MyMap({ mapData, route }) {
   // Log the mapData prop for debugging
   console.log("mapData prop in MyMap component:", mapData);
 
@@ -61,5 +61,3 @@ function MyMap({ mapData, route }) {
     </div>
   );
 }
-
-export default MyMap;
