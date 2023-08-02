@@ -37,29 +37,29 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
     setEndLocation(suggestion.latlng);
   };
 
-    // Restrict location suggestions to New York.
-    const fetch = ({ value }) => {
-      opencage
-        .geocode({ 
-          key: "378bbab421b943cc95ef067c6295c57a", 
-          q: value, 
-          bounds: [
-            [-74.25909, 40.477399], // southwest corner
-            [-73.700272, 40.917577] // northeast corner
-          ] 
-        })
-        .then((response) => {
-          const { results } = response;
-          setSuggestions(
-            results.map((result) => ({
-              name: result.formatted,
-              latlng: [result.geometry.lat, result.geometry.lng],
-            }))
-          );
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+  // Restrict location suggestions to New York.
+  const fetch = ({ value }) => {
+    opencage
+      .geocode({ 
+        key: "378bbab421b943cc95ef067c6295c57a", 
+        q: value, 
+        bounds: [
+          [-74.25909, 40.477399], // southwest corner
+          [-73.700272, 40.917577] // northeast corner
+        ] 
+      })
+      .then((response) => {
+        const { results } = response;
+        setSuggestions(
+          results.map((result) => ({
+            name: result.formatted,
+            latlng: [result.geometry.lat, result.geometry.lng],
+          }))
+        );
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
     };
   
     const fetchDestination = ({ value }) => {
