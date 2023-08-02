@@ -4,15 +4,16 @@ import SubmitButton from "./SubmitButton";
 import ApiService from "../../services/ApiService";
 import "./DateSelector.css";
 
-export default function DateSelector({ onDateSubmit }) {
+export default function DateSelector({ onDateSubmit, startLocation, endLocation , mode = "balance" }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [mapData, setMapData] = useState([]);
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };
 
+
   const handleSubmit = () => {
-    if (selectedDate) {
+    if (selectedDate && startLocation && endLocation) {
       ApiService.submitDate(selectedDate)
         .then((response) => {
           console.log("Api Response:", response.data);
@@ -23,7 +24,7 @@ export default function DateSelector({ onDateSubmit }) {
           console.error("Error:", error);
         });
     } else {
-      console.log("No Date Selected");
+      console.log("No date or starting and ending points selected");
     }
   };
   return (
