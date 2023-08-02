@@ -60,32 +60,32 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
       .catch((error) => {
         console.error("Error:", error);
       });
-  };
-
-  const fetchDestination = ({ value }) => {
-    opencage
-      .geocode({ 
-        key: "378bbab421b943cc95ef067c6295c57a", 
-        q: value, 
-        bounds: [
-          [-74.25909, 40.477399], // southwest corner
-          [-73.700272, 40.917577] // northeast corner
-        ] 
-      })
-      .then((response) => {
-        const { results } = response;
-        setSuggestionsDestination(
-          results.map((result) => ({
-            name: result.formatted,
-            latlng: [result.geometry.lat, result.geometry.lng],
-          }))
-        );
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  };
-
+    };
+  
+    const fetchDestination = ({ value }) => {
+      opencage
+        .geocode({ 
+          key: "378bbab421b943cc95ef067c6295c57a", 
+          q: value, 
+          bounds: [
+            [-74.25909, 40.477399], // southwest corner
+            [-73.700272, 40.917577] // northeast corner
+          ] 
+        })
+        .then((response) => {
+          const { results } = response;
+          setSuggestionsDestination(
+            results.map((result) => ({
+              name: result.formatted,
+              latlng: [result.geometry.lat, result.geometry.lng],
+            }))
+          );
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    };
+  
   const inputProps = {
     placeholder: "Search a location...",
     value,
