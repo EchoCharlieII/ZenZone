@@ -19,8 +19,8 @@ def formate_frontend_datetime(dt_string):
     return dt
 
 
-input_string = "2023-07-16T11:11:11.001Z"
-dt = formate_frontend_datetime(input_string)
-print(dt)
-print(type(dt))
-print(formate_dt_for_model(dt))
+# input_string = "2023-07-16T11:11:11.001Z"
+# dt = formate_frontend_datetime(input_string)
+# print(dt)
+# print(type(dt))
+# print(formate_dt_for_model(dt))
