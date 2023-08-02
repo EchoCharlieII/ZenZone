@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import CustomDatePicker from './CustomDatePicker';
-import SubmitButton from './SubmitButton';
-import ApiService from '../../services/ApiService';
-import './DateSelector.css';
+import React, { useState } from "react";
+import CustomDatePicker from "./CustomDatePicker";
+import SubmitButton from "./SubmitButton";
+import ApiService from "../../services/ApiService";
+import "./DateSelector.css";
 
 const DateSelector = ({ onDateSubmit }) => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -15,22 +15,22 @@ const DateSelector = ({ onDateSubmit }) => {
   const handleSubmit = () => {
     if (selectedDate) {
       ApiService.submitDate(selectedDate)
-      .then((response) => {
-        console.log("Api Response:", response.data);
-        setMapData(response.data); // Set received data to the state variable
-        onDateSubmit(response.data); // Pass the data to the parent component
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  } else {
-    console.log("No Date Selected");
-  }
+        .then((response) => {
+          console.log("Api Response:", response.data);
+          setMapData(response.data); // Set received data to the state variable
+          onDateSubmit(response.data); // Pass the data to the parent component
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    } else {
+      console.log("No Date Selected");
+    }
   };
   return (
     <div>
       <CustomDatePicker onDateChange={handleDateChange} />
-      <SubmitButton onSubmit={handleSubmit} selectedDate={selectedDate}/>
+      <SubmitButton onSubmit={handleSubmit} selectedDate={selectedDate} />
     </div>
   );
 };
