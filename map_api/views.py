@@ -1,11 +1,8 @@
 import json
 import math
 
-import pandas as pd
 from django.http import JsonResponse
-from utils import formate_datetime, get_weather_data, get_model, get_path, get_places
-
-from constants import MODLE_ID_RANGE
+from utils import get_path, get_places, get_predictions
 
 
 # Create your views here.
@@ -16,40 +13,24 @@ def render_map(request):
 
     # formate date which is from frontend
     date_time = data['date']
-    formatted_dt = formate_datetime.formate_frontend_datetime(date_time)
-    month = formatted_dt.month
-    # according to date to get month and time_of_week
-    time_of_week = formate_datetime.formate_dt_for_model(formatted_dt)
-
-    # according date to get weather data from weather API
-
-    temp = get_weather_data.get_weather_data(formatted_dt)['temp']
 
     # use each model to generate calm rate
-    if request.method == 'POST':
-        predictions = []
-        # using prediction model to produce result
-        for id in MODLE_ID_RANGE:
-            model = get_model.get_model_by_id(id)
-            predict_result = model.predict([[temp, month, time_of_week]])[0]
-            predictions.append({'Taxi_Zone_ID': id, 'calm rate': predict_result})
+    predictions = get_predictions.get_prediction_result(date_time)
 
-        # Test simplified data: (street_zones_factor_simplified.parquet instead of street_zones_factor.parquet)
-        df_street_busyness = pd.read_parquet('predictions/street_zones_factor_simplified.parquet')
-        df_predictions = pd.DataFrame(predictions)
-        result = pd.merge(df_predictions, df_street_busyness, how='left', on='Taxi_Zone_ID')
-        result['street_calm_rate'] = 1 - (1 - result['calm rate']) * result['highway_factor']
-        result = result[['Taxi_Zone_ID', 'geometry', 'street_calm_rate']]
-        result = result.to_dict(orient='records')
-    return JsonResponse(
-        result, safe=False)
+    # Test simplified data: (street_zones_factor_simplified.parquet instead of street_zones_factor.parquet)
+    result = get_predictions.formatted_prediction_data(predictions)
+
+    return JsonResponse(result, safe=False)
 
 
 def best_path(request):
     data = json.loads(request.body)
-    with open('output_data.json', 'r') as f:
-        street_data = json.load(f)
-    path = get_path.find_best_path(street_data, data['mode'], data['source'], data['target'])
+
+    street_data = get_predictions.formatted_prediction_data(
+        get_predictions.get_prediction_result(data['date'])
+    )
+    G = get_path.create_street_graph(street_data, data['mode'])
+    path = get_path.find_best_path(G, data['source'], data['target'])
     distance = 0
     for index in range(len(path) - 1):
         current_point = path[index]
@@ -64,6 +45,7 @@ def best_path(request):
     km = math.floor(distance)
     meter = math.ceil((distance * 1000) % 1000)
     return JsonResponse({
+        'mode': data['mode'],
         'path': path,
         'time': {
             'hour': hour,
@@ -95,3 +77,23 @@ def quite_places(request):
     return JsonResponse({
         'results': place_info
     }, safe=False)
+
+
+def circular_walking(request):
+    data = json.loads(request.body)
+
+    street_data = get_predictions.formatted_prediction_data(
+        get_predictions.get_prediction_result(data['date'])
+    )
+    G = get_path.create_street_graph(street_data, 'balance')
+
+    desired_walking_time = data['duration']
+    user_location = data['source']
+    circular_path = get_path.generate_circular_path(G, user_location, desired_walking_time)
+
+    return JsonResponse(
+        {
+            'path': circular_path
+        },
+        safe=False
+    )

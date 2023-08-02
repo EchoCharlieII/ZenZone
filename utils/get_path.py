@@ -1,3 +1,5 @@
+import math
+import random
 import networkx as nx
 from math import radians, sin, cos, sqrt, atan2
 
@@ -126,14 +128,13 @@ def find_nearest_crossing_points(street_graph, user_location, destination_locati
 
 
 # Implement a function to find the best path using NetworkX's shortest path algorithms.
-def find_best_path(streets_data, mode, source, target):
+def find_best_path(graph, source, target):
     """
     Find the best path from source to target in the graph using Dijkstra's algorithm.
     graph: The graph with streets as edges and busyness as edge weight.
     source: The starting location as a tuple (latitude, longitude).
     target: The target location as a tuple (latitude, longitude).
     """
-    graph = create_street_graph(streets_data, mode)
     nearest_crossing = find_nearest_crossing_points(graph, source, target)
     try:
         path = nx.shortest_path(graph, source=nearest_crossing[0], target=nearest_crossing[1], weight='weight')
@@ -160,3 +161,38 @@ def extract_vertices_from_linestring(wkt_linestring):
         vertices.append((lat, lon))  # Note the order (latitude, longitude)
 
     return vertices
+
+
+def random_walk(graph, starting_node, desired_time):
+    current_node = starting_node
+    total_time = 0
+    forward_path = [current_node]
+
+    while total_time < (desired_time / 2):
+        neighboring_crossings = list(graph.neighbors(current_node))
+        next_node = random.choice(neighboring_crossings)
+        distance = haversine_distance(current_node[0], current_node[1], next_node[0], next_node[1])
+        # edge_data = graph.get_edge_data(current_node, next_node)
+        walking_time = math.ceil((distance / 5) * 60)  # Use busyness or other factors to estimate walking time
+        total_time += walking_time
+
+        current_node = next_node
+        forward_path.append(current_node)
+    back_path = find_best_path(graph, current_node, starting_node)
+
+    return forward_path + back_path
+
+
+# Step 5: Main function to generate the circular path
+def generate_circular_path(graph, user_location, desired_walking_time):
+    # Step 1: Find the nearest crossing point to the user's starting location
+    nearest_user_crossing, _ = find_nearest_crossing_points(graph, user_location, user_location)
+
+    # Step 2 and 3: Perform a random walk
+    random_walk_path = random_walk(graph, nearest_user_crossing, desired_walking_time)
+
+    # Step 4: Optimize the path to form a circle
+    # circular_path = optimize_path(graph, random_walk_path)
+
+    # return circular_path
+    return random_walk_path
