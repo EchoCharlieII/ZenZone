@@ -126,9 +126,7 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
   };
 
   const toggleGemItems = () => {
-    if (isSidebarOpen) {
-      setShowGemItems(!showGemItems);
-    }
+    setShowGemItems(!showGemItems);
   };
 
   useEffect(() => {
@@ -154,7 +152,10 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
             />
           </MenuItem>
           <MenuItem
-            onClick={isSidebarOpen ? toggleDateSelector : undefined}
+            onClick={() => {
+              if (!isSidebarOpen) toggleSidebar();
+              toggleDateSelector();
+            }}
             icon={<RouteOutlinedIcon />}
           >
             Route Planner
@@ -208,7 +209,15 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
               <button onClick={null}>Clear</button> {/*  TODO: Clear button */}
             </div>
           )}
-          <MenuItem onClick={toggleGemItems} icon={<DiamondOutlinedIcon />}>
+          <MenuItem 
+            onClick={() => {
+              toggleGemItems();
+              if (!isSidebarOpen) {
+                toggleSidebar();
+              }
+            }} 
+            icon={<DiamondOutlinedIcon />}
+          >
             Hidden Gems
           </MenuItem>
           {showGemItems && (
