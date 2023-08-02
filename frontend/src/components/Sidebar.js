@@ -37,9 +37,17 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
     setEndLocation(suggestion.latlng);
   };
 
+  // Restrict location suggestions to New York.
   const fetch = ({ value }) => {
     opencage
-      .geocode({ key: "378bbab421b943cc95ef067c6295c57a", q: value })
+      .geocode({ 
+        key: "378bbab421b943cc95ef067c6295c57a", 
+        q: value, 
+        bounds: [
+          [-74.25909, 40.477399], // southwest corner
+          [-73.700272, 40.917577] // northeast corner
+        ] 
+      })
       .then((response) => {
         const { results } = response;
         setSuggestions(
@@ -56,7 +64,14 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
 
   const fetchDestination = ({ value }) => {
     opencage
-      .geocode({ key: "378bbab421b943cc95ef067c6295c57a", q: value })
+      .geocode({ 
+        key: "378bbab421b943cc95ef067c6295c57a", 
+        q: value, 
+        bounds: [
+          [-74.25909, 40.477399], // southwest corner
+          [-73.700272, 40.917577] // northeast corner
+        ] 
+      })
       .then((response) => {
         const { results } = response;
         setSuggestionsDestination(
