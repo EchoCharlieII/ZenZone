@@ -14,11 +14,11 @@ export default function DateSelector({ onDateSubmit, startLocation, endLocation 
 
   const handleSubmit = () => {
     if (selectedDate && startLocation && endLocation) {
-      ApiService.submitDate(selectedDate)
+      ApiService.renderBestRoute(selectedDate, startLocation, endLocation, mode)
         .then((response) => {
-          console.log("Api Response:", response.data);
-          setMapData(response.data); // Set received data to the state variable
-          onDateSubmit(response.data); // Pass the data to the parent component
+          console.log("Api Response:", response.data.path);
+          setMapData(response.data.path); // Set received data to the state variable
+          onDateSubmit(response.data.path); // Pass the data to the parent component
         })
         .catch((error) => {
           console.error("Error:", error);

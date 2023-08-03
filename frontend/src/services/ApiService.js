@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const ApiService = {
-  submitRoute: async (selectedDate, startLocation, endLocation, mode) => {
+  renderBestRoute: async (selectedDate, startLocation, endLocation, mode) => {
     try {
       // Generating the POST request to the backend
       const response = await axios.post(
@@ -14,7 +14,7 @@ const ApiService = {
         },
         { headers: { "Content-Type": "application/json" } }
       );
-      console.log("Data:", response.data);
+      // console.log("Data:", response.data);
 
       // const firstObject = response.data[0];
 
@@ -28,15 +28,15 @@ const ApiService = {
     }
   },
 
-  submitDate: async (date) => {
+  renderAllRoad: async (date) => {
     try {
         // Generating the POST request to the backend
         const response = await axios.post('http://localhost:8000/map-api/render-map', { date });
-          console.log("Data:", response.data);
+          // console.log("Data:", response.data);
 
-          const firstObject = response.data[0];
+          // const firstObject = response.data[0];
 
-          console.log("First Object:", JSON.stringify(firstObject));
+          // console.log("First Object:", JSON.stringify(firstObject));
         
 
         
