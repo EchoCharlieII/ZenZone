@@ -7,7 +7,7 @@ import LocalCafeOutlinedIcon from "@mui/icons-material/LocalCafeOutlined";
 import MuseumOutlinedIcon from "@mui/icons-material/MuseumOutlined";
 import LocalLibraryOutlinedIcon from "@mui/icons-material/LocalLibraryOutlined";
 import ParkOutlinedIcon from "@mui/icons-material/ParkOutlined";
-import DateSelector from "./DateSelector/DateSelector";
+import DateSelector from "./RoutePlanner/DateSelector";
 import logo from "./logo_text.svg";
 import "../pages/Map.css";
 import opencage from "opencage-api-client";
@@ -144,12 +144,12 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
     setShowGemItems(!showGemItems);
   };
 
-  useEffect(() => {
-    if (startLocation && endLocation) {
-      // Call the function that highlights the route on the map
-      onLocationsSelected(startLocation, endLocation);
-    }
-  }, [startLocation, endLocation, onLocationsSelected]);
+  // useEffect(() => {
+  //   if (startLocation && endLocation) {
+  //     // Call the function that highlights the route on the map
+  //     onLocationsSelected(startLocation, endLocation);
+  //   }
+  // }, [startLocation, endLocation, onLocationsSelected]);
 
   return (
     <div id="app">
@@ -178,55 +178,104 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
 
           {showDateSelector && (
             <div className="autosuggest-form">
-              <p style={{ fontSize: "16px" }}>Select starting and ending points:</p>
-              <div className="location-form">
-                <Autosuggest
-                  suggestions={suggestions}
-                  onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-                  onSuggestionsClearRequested={onSuggestionsClearRequested}
-                  getSuggestionValue={getSuggestionValue}
-                  renderSuggestion={renderSuggestion}
-                  inputProps={inputProps}
-                  onSuggestionSelected={onSuggestionSelected}
-                  theme={{
-                    suggestionsList: {
-                      listStyleType: "none", // Removes bullet points
-                      marginLeft: "-35px",
-                    },
-                    suggestion: {
-                      fontSize: "14px", // Sets font size to 14px
-                    },
-                  }}
-                />
-              </div>
-              <div className="location-form">
-                <Autosuggest
-                  suggestions={suggestionsDestination}
-                  onSuggestionsFetchRequested={
-                    onSuggestionsFetchRequestedDestination
-                  }
-                  onSuggestionsClearRequested={
-                    onSuggestionsClearRequestedDestination
-                  }
-                  getSuggestionValue={getSuggestionValueDestination}
-                  renderSuggestion={renderSuggestionDestination}
-                  inputProps={inputPropsDestination}
-                  onSuggestionSelected={onSuggestionSelectedDestination}
-                  theme={{
-                    suggestionsList: {
-                      listStyleType: "none", // Removes bullet points
-                      marginLeft: "-35px",
-                    },
-                    suggestion: {
-                      fontSize: "13px", // Sets font size to 14px
-                    },
-                  }}
-                />
-              </div>
+              {/* <p style={{ fontSize: "16px" }}>Select starting and ending points:</p>
+              <Autosuggest
+                suggestions={suggestions}
+                onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+                onSuggestionsClearRequested={onSuggestionsClearRequested}
+                getSuggestionValue={getSuggestionValue}
+                renderSuggestion={renderSuggestion}
+                inputProps={inputProps}
+                onSuggestionSelected={onSuggestionSelected}
+                theme={{
+                  suggestionsList: {
+                    listStyleType: "none", // Removes bullet points
+                  },
+                  suggestion: {
+                    fontSize: "14px", // Sets font size to 14px
+                  },
+                }}
+              />
+              <Autosuggest
+                suggestions={suggestionsDestination}
+                onSuggestionsFetchRequested={
+                  onSuggestionsFetchRequestedDestination
+                }
+                onSuggestionsClearRequested={
+                  onSuggestionsClearRequestedDestination
+                }
+                getSuggestionValue={getSuggestionValueDestination}
+                renderSuggestion={renderSuggestionDestination}
+                inputProps={inputPropsDestination}
+                onSuggestionSelected={onSuggestionSelectedDestination}
+                theme={{
+                  suggestionsList: {
+                    listStyleType: "none", // Removes bullet points
+                    marginLeft: "-35px",
+                  },
+                  suggestion: {
+                    fontSize: "13px", // Sets font size to 14px
+                  },
+                }}
+              />
               <div className="date-selector-container">
                 <DateSelector onDateSubmit={setMapData} />
               </div>
-              <button onClick={null}>Clear</button> {/*  TODO: Clear button */}
+              <button onClick={null}>Clear</button>   */}
+
+              <p style={{ fontSize: "16px" }}>
+                Select starting and ending points:
+              </p>
+              <Autosuggest
+                suggestions={suggestions}
+                onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+                onSuggestionsClearRequested={onSuggestionsClearRequested}
+                getSuggestionValue={getSuggestionValue}
+                renderSuggestion={renderSuggestion}
+                inputProps={inputProps}
+                onSuggestionSelected={onSuggestionSelected}
+                theme={{
+                  suggestionsList: {
+                    listStyleType: "none", // Removes bullet points
+                  },
+                  suggestion: {
+                    fontSize: "14px", // Sets font size to 14px
+                  },
+                }}
+              />
+              <Autosuggest
+                suggestions={suggestionsDestination}
+                onSuggestionsFetchRequested={
+                  onSuggestionsFetchRequestedDestination
+                }
+                onSuggestionsClearRequested={
+                  onSuggestionsClearRequestedDestination
+                }
+                getSuggestionValue={getSuggestionValueDestination}
+                renderSuggestion={renderSuggestionDestination}
+                inputProps={inputPropsDestination}
+                onSuggestionSelected={onSuggestionSelectedDestination}
+                theme={{
+                  suggestionsList: {
+                    listStyleType: "none", // Removes bullet points
+                    marginLeft: "-35px",
+                  },
+                  suggestion: {
+                    fontSize: "13px", // Sets font size to 14px
+                  },
+                }}
+              />
+              <div className="date-selector-container">
+                <DateSelector onDateSubmit={setMapData} startLocation={startLocation} endLocation={endLocation} />
+              </div>
+              <button
+                onClick={() => {
+                  console.log(startLocation, endLocation);
+                }}
+              >
+                Test
+              </button>
+              {/*  TODO: Clear button */}
             </div>
           )}
           <MenuItem 

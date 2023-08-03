@@ -11,8 +11,6 @@ export default function MyMap({ mapData, route }) {
   const centerCoordinates = [40.7484, -73.9857];
   //const [isLoading, setLoading] = useState(true);
 
-  console.log("Received Map Data:", mapData);
-
   // Function to parse the LINESTRING coordinates
   const parseCoordinates = (lineString) => {
     // Assuming lineString is in the format: 'LINESTRING (lon1 lat1, lon2 lat2, ...)'
@@ -52,6 +50,11 @@ export default function MyMap({ mapData, route }) {
 
   // Limit the number of objects to render on the map (80,000 in this case)
   const limitedMapData = mapData.slice(0, 80000);
+  
+  
+  console.log(limitedMapData);
+
+  console.log(route);
 
 
   // State for loading screen
@@ -74,15 +77,16 @@ export default function MyMap({ mapData, route }) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution="Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors"
         />
-        <Polyline positions={route} color="blue" />
+        <Polyline positions={limitedMapData} color="blue" />
 
-        {limitedMapData.map((item, index) => {
+        {/* {limitedMapData.map((item, index) => {
           const coordinates = parseCoordinates(item.geometry);
           const streetCalmRate = item.street_calm_rate;
           const color = getColor(streetCalmRate);
 
           return <Polyline key={index} positions={coordinates} color={color} />;
-        })}
+        })} */}
+
       </MapContainer>
     </div>
   );
