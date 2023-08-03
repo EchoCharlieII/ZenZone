@@ -25,6 +25,8 @@ function MyMap({ mapData, route }) {
     });
     return coordinatesArray;
   };
+  
+  
 
   // Function to calculate the color based on street_calm_rate
   const getColor = (streetCalmRate) => {
@@ -37,8 +39,18 @@ function MyMap({ mapData, route }) {
   // Limit the number of objects to render on the map (80,000 in this case)
   const limitedMapData = mapData.slice(0, 80000);
 
+
+  // State for loading screen
+  const [isLoading, setIsLoading] = useState(true);
+
+  //hide loading screen
+  if (document.getElementById('loading-screen')) {
+    document.getElementById('loading-screen').style.display = 'none';
+  }
+
   return (
     <div style={{ width: '100%', height: '100%' }}>
+      <div id="loading-screen"></div>
       <MapContainer
         center={centerCoordinates}
         zoom={13}

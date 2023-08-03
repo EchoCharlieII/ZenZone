@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
-import MyMap from '../components/MyMap';
 import Sidebar from '../components/Sidebar';
+import MyMap from '../components/MyMap';
 import './Map.css';
 
 // Importing the component for the loading screen
