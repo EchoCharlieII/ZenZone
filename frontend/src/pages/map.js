@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MyMap from "../components/MyMap";
 import Sidebar from "../components/Sidebar";
+import ApiService from '../services/ApiService';
 import "./Map.css";
 
 
@@ -13,6 +14,19 @@ export default function Map() {
   // Holding the data sent from the backend, initially set to an empty array
   const [mapData, setMapData] = useState([]);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    // This code runs after the component is mounted
+    ApiService.submitDate(new Date())
+    .then((response) => {
+        console.log("Api Response:", response.data);
+        setMapData(response.data); // Pass the data to the parent component
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
