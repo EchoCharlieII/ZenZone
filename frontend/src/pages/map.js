@@ -3,6 +3,7 @@ import MyMap from "../components/MyMap";
 import Sidebar from "../components/Sidebar";
 import "./Map.css";
 
+
 // Importing the component for the loading screen
 //import Loading from "../components/PageLoading/loading";
 
