@@ -179,45 +179,50 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
           {showDateSelector && (
             <div className="autosuggest-form">
               <p style={{ fontSize: "16px" }}>Select starting and ending points:</p>
-              <Autosuggest
-                suggestions={suggestions}
-                onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-                onSuggestionsClearRequested={onSuggestionsClearRequested}
-                getSuggestionValue={getSuggestionValue}
-                renderSuggestion={renderSuggestion}
-                inputProps={inputProps}
-                onSuggestionSelected={onSuggestionSelected}
-                theme={{
-                  suggestionsList: {
-                    listStyleType: "none", // Removes bullet points
-                  },
-                  suggestion: {
-                    fontSize: "14px", // Sets font size to 14px
-                  },
-                }}
-              />
-              <Autosuggest
-                suggestions={suggestionsDestination}
-                onSuggestionsFetchRequested={
-                  onSuggestionsFetchRequestedDestination
-                }
-                onSuggestionsClearRequested={
-                  onSuggestionsClearRequestedDestination
-                }
-                getSuggestionValue={getSuggestionValueDestination}
-                renderSuggestion={renderSuggestionDestination}
-                inputProps={inputPropsDestination}
-                onSuggestionSelected={onSuggestionSelectedDestination}
-                theme={{
-                  suggestionsList: {
-                    listStyleType: "none", // Removes bullet points
-                    marginLeft: "-35px",
-                  },
-                  suggestion: {
-                    fontSize: "13px", // Sets font size to 14px
-                  },
-                }}
-              />
+              <div className="location-form">
+                <Autosuggest
+                  suggestions={suggestions}
+                  onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+                  onSuggestionsClearRequested={onSuggestionsClearRequested}
+                  getSuggestionValue={getSuggestionValue}
+                  renderSuggestion={renderSuggestion}
+                  inputProps={inputProps}
+                  onSuggestionSelected={onSuggestionSelected}
+                  theme={{
+                    suggestionsList: {
+                      listStyleType: "none", // Removes bullet points
+                      marginLeft: "-35px",
+                    },
+                    suggestion: {
+                      fontSize: "14px", // Sets font size to 14px
+                    },
+                  }}
+                />
+              </div>
+              <div className="location-form">
+                <Autosuggest
+                  suggestions={suggestionsDestination}
+                  onSuggestionsFetchRequested={
+                    onSuggestionsFetchRequestedDestination
+                  }
+                  onSuggestionsClearRequested={
+                    onSuggestionsClearRequestedDestination
+                  }
+                  getSuggestionValue={getSuggestionValueDestination}
+                  renderSuggestion={renderSuggestionDestination}
+                  inputProps={inputPropsDestination}
+                  onSuggestionSelected={onSuggestionSelectedDestination}
+                  theme={{
+                    suggestionsList: {
+                      listStyleType: "none", // Removes bullet points
+                      marginLeft: "-35px",
+                    },
+                    suggestion: {
+                      fontSize: "13px", // Sets font size to 14px
+                    },
+                  }}
+                />
+              </div>
               <div className="date-selector-container">
                 <DateSelector onDateSubmit={setMapData} />
               </div>
