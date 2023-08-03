@@ -30,11 +30,25 @@ export default function MyMap({ mapData, route }) {
 
   // Function to calculate the color based on street_calm_rate
   const getColor = (streetCalmRate) => {
-    const red = Math.round(255 * (1 - streetCalmRate));
-    const green = Math.round(255 * streetCalmRate);
-    const blue = 0; // You can set this to any constant value for now
+    const brightnessFactor = 0.9;  // Reduce brightness to get darker colors. You can adjust this as needed.
+    let red = 0;
+    let green = 0;
+    const blue = 0;
+    
+    if (streetCalmRate <= 0.5) {
+        // transition from red to yellow
+        red = Math.round(255 * brightnessFactor); // Apply brightness reduction
+        green = Math.round(255 * (streetCalmRate / 0.5) * brightnessFactor); // Normalize and reduce brightness
+    } else {
+        // transition from yellow to green
+        red = Math.round(255 * ((1 - streetCalmRate) / 0.5) * brightnessFactor); // Normalize and reduce brightness
+        green = Math.round(255 * brightnessFactor); // Apply brightness reduction
+    }
+    
     return `rgb(${red}, ${green}, ${blue})`;
   };
+
+
 
   // Limit the number of objects to render on the map (80,000 in this case)
   const limitedMapData = mapData.slice(0, 80000);
