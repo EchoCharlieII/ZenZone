@@ -1,6 +1,5 @@
-import json
-import random
 import math
+import random
 import networkx as nx
 from math import radians, sin, cos, sqrt, atan2
 
@@ -129,7 +128,7 @@ def find_nearest_crossing_points(street_graph, user_location, destination_locati
 
 
 # Implement a function to find the best path using NetworkX's shortest path algorithms.
-def find_best_path(graph, mode, source, target):
+def find_best_path(graph, source, target):
     """
     Find the best path from source to target in the graph using Dijkstra's algorithm.
     graph: The graph with streets as edges and busyness as edge weight.
@@ -164,7 +163,6 @@ def extract_vertices_from_linestring(wkt_linestring):
     return vertices
 
 
-# Step 2 and 3: Perform a random walk
 def random_walk(graph, starting_node, desired_time):
     current_node = starting_node
     total_time = 0
@@ -180,53 +178,9 @@ def random_walk(graph, starting_node, desired_time):
 
         current_node = next_node
         forward_path.append(current_node)
-    back_path = find_best_path(graph, "balance", current_node, starting_node)
+    back_path = find_best_path(graph, current_node, starting_node)
 
     return forward_path + back_path
-
-
-# Step 4: Use a greedy approach to optimize the path and ensure it forms a circle
-# def optimize_path(graph, random_walk_path):
-#     # Calculate the total walking time and distance of the random walk path
-#     total_time = sum(graph.get_edge_data(random_walk_path[i], random_walk_path[i + 1])['weight']
-#                      for i in range(len(random_walk_path) - 1))
-#     total_distance = sum(haversine_distance(random_walk_path[i][0], random_walk_path[i][1],
-#                                             random_walk_path[i + 1][0], random_walk_path[i + 1][1])
-#                          for i in range(len(random_walk_path) - 1))
-#
-#     # Find the starting point and ending point of the random walk path
-#     start_point = random_walk_path[0]
-#     end_point = random_walk_path[-1]
-#
-#     # Calculate the target angle between the starting point and ending point
-#     target_angle = 2 * math.pi * total_time / (24 * 60 * total_distance)
-#
-#     # Greedy optimization to adjust the path and ensure it forms a circle
-#     optimized_path = [start_point]
-#     current_angle = 0
-#
-#     for i in range(1, len(random_walk_path) - 1):
-#         node = random_walk_path[i]
-#         prev_node = optimized_path[-1]
-#
-#         # Calculate the angle between the previous point and the current point
-#         angle = math.atan2(node[0] - prev_node[0], node[1] - prev_node[1])
-#
-#         # Adjust the angle to ensure the circular path
-#         current_angle += angle
-#         target_angle_diff = target_angle - current_angle
-#         adjusted_angle = angle + target_angle_diff
-#
-#         # Calculate the adjusted coordinates for the current point
-#         adjusted_x = prev_node[0] + math.sin(adjusted_angle) * (total_distance / (2 * math.pi))
-#         adjusted_y = prev_node[1] + math.cos(adjusted_angle) * (total_distance / (2 * math.pi))
-#
-#         optimized_path.append((adjusted_x, adjusted_y))
-#
-#     # Complete the circular path by adding the ending point
-#     optimized_path.append(end_point)
-#
-#     return optimized_path
 
 
 # Step 5: Main function to generate the circular path
@@ -242,20 +196,3 @@ def generate_circular_path(graph, user_location, desired_walking_time):
 
     # return circular_path
     return random_walk_path
-
-
-# Example usage:
-if __name__ == "__main__":
-    # Example user's starting location (latitude, longitude)
-    user_location = (40.725326, -73.976212)
-    with open('output_data.json', 'r') as f:
-        street_data = json.load(f)
-    street_graph = create_street_graph(street_data, 'balance')
-    # Desired walking time in minutes (adjust this according to your preference)
-    desired_walking_time = 30
-
-    # Generate the circular path
-    circular_path = generate_circular_path(street_graph, user_location, desired_walking_time)
-
-    # Display the circular path
-    print("Circular path:", circular_path)

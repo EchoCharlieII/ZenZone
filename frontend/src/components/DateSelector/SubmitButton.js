@@ -1,20 +1,14 @@
-import React from 'react';
-import './DateSelector.css';
+import React from "react";
+import "./DateSelector.css";
 
-const SubmitButton = ({ selectedDate, onSubmit }) => {
+export default function SubmitButton({ selectedDate, onSubmit }) {
   const handleSubmit = () => {
     if (selectedDate) {
       onSubmit(selectedDate); // Call the onSubmit function passed by the parent component
     } else {
-      console.log('No date selected');
+      console.log("No date selected");
     }
   };
 
-  return (
-    <button onClick={handleSubmit}>
-      Submit
-    </button>
-  );
-};
-
-export default SubmitButton;
+  return <button onClick={handleSubmit}>Submit</button>;
+}

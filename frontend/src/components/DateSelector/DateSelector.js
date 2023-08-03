@@ -4,7 +4,8 @@ import SubmitButton from './SubmitButton';
 import ApiService from '../../services/ApiService';
 import './DateSelector.css';
 
-const DateSelector = ({ onDateSubmit }) => {
+
+export default function DateSelector({ onDateSubmit }) {
   const [selectedDate, setSelectedDate] = useState(null);
 
   useEffect(() => {
@@ -40,13 +41,12 @@ const DateSelector = ({ onDateSubmit }) => {
   } else {
     console.log("No Date Selected");
   }
+
   };
   return (
     <div>
       <CustomDatePicker onDateChange={handleDateChange} />
-      <SubmitButton onSubmit={handleSubmit} selectedDate={selectedDate}/>
+      <SubmitButton onSubmit={handleSubmit} selectedDate={selectedDate} />
     </div>
   );
-};
-
-export default DateSelector;
+}

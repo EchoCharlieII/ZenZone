@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 // Datepicker is a third party library which allows the user a date selection interface
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import './DateSelector.css';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import "./DateSelector.css";
 
-const CustomDatePicker = ({onDateChange}) => {
+export default function CustomDatePicker({ onDateChange }) {
   // The selectedDate can be changed, therefore we need to use useState
   const [selectedDate, setSelectedDate] = useState(null);
 
@@ -15,9 +15,9 @@ const CustomDatePicker = ({onDateChange}) => {
 
   return (
     <div>
-      <p style={{ fontSize: '16px' }}>Select a Date:</p>
+      <p style={{ fontSize: "16px" }}>Select a Date:</p>
       <DatePicker
-        selected={selectedDate} 
+        selected={selectedDate}
         onChange={handleDateChange}
         showTimeSelect
         timeFormat="HH:mm"
@@ -27,6 +27,4 @@ const CustomDatePicker = ({onDateChange}) => {
       />
     </div>
   );
-};
-
-export default CustomDatePicker;
+}
