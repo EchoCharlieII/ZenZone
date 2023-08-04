@@ -52,10 +52,6 @@ export default function MyMap({ mapData, route }) {
   const limitedMapData = mapData.slice(0, 80000);
   
   
-  console.log(limitedMapData);
-
-  console.log(route);
-
 
   // State for loading screen
   const [isLoading, setIsLoading] = useState(true);

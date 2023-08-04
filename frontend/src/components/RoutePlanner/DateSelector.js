@@ -5,7 +5,7 @@ import ApiService from '../../services/ApiService';
 import './DateSelector.css';
 
 
-export default function DateSelector({ onDateSubmit, startLocation, endLocation , mode = "balance" }) {
+export default function DateSelector({ onDateSubmit, startLocation, endLocation , mode}) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [mapData, setMapData] = useState([]);
   const handleDateChange = (date) => {
@@ -14,7 +14,7 @@ export default function DateSelector({ onDateSubmit, startLocation, endLocation 
 
 
   const handleSubmit = () => {
-    if (selectedDate && startLocation && endLocation) {
+    if (selectedDate && startLocation && endLocation && mode) {
       ApiService.renderBestRoute(selectedDate, startLocation, endLocation, mode)
         .then((response) => {
           console.log("Api Response:", response.data.path);
@@ -25,12 +25,13 @@ export default function DateSelector({ onDateSubmit, startLocation, endLocation 
           console.error("Error:", error);
         });
     } else {
-      console.log("No date or starting and ending points selected");
+      alert("Please select the locations and your wanted mode.");
     }
   };
   return (
     <div>
       <CustomDatePicker onDateChange={handleDateChange} />
+      <br />
       <SubmitButton onSubmit={handleSubmit} selectedDate={selectedDate} />
     </div>
   );

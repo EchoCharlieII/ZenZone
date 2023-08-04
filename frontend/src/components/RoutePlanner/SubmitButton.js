@@ -6,7 +6,7 @@ export default function SubmitButton({ selectedDate, onSubmit }) {
     if (selectedDate) {
       onSubmit(selectedDate); // Call the onSubmit function passed by the parent component
     } else {
-      console.log("No date selected");
+      alert("No date selected.");
     }
   };
 

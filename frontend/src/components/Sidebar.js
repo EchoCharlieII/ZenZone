@@ -12,6 +12,7 @@ import logo from "./logo_text.svg";
 import "../pages/Map.css";
 import opencage from "opencage-api-client";
 import Autosuggest from "react-autosuggest";
+import ModeSelectMenu from "./RoutePlanner/ModeSelectMenu";
 
 export default function Sidebar({ onLocationsSelected, setMapData }) {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -25,6 +26,12 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
   // For the Destination Location
   const [valueDestination, setValueDestination] = useState("");
   const [suggestionsDestination, setSuggestionsDestination] = useState([]);
+
+  // For the modeSelectMenu
+  const [mode, setMode] = useState("");
+  const handleSelectionChange = (newValue) => {
+    setMode(newValue);
+  };
 
   const [startLocation, setStartLocation] = useState(null);
   const [endLocation, setEndLocation] = useState(null);
@@ -243,6 +250,7 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
                   },
                 }}
               />
+
               <Autosuggest
                 suggestions={suggestionsDestination}
                 onSuggestionsFetchRequested={
@@ -265,16 +273,17 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
                   },
                 }}
               />
+              <br />
+              <p style={{ fontSize: "16px" }}>
+                Select your mode:
+              </p>
+              <ModeSelectMenu onSelectionChange={handleSelectionChange} />
+
               <div className="date-selector-container">
-                <DateSelector onDateSubmit={setMapData} startLocation={startLocation} endLocation={endLocation} />
+                <DateSelector onDateSubmit={setMapData} startLocation={startLocation} endLocation={endLocation} mode={mode}/>
               </div>
-              <button
-                onClick={() => {
-                  console.log(startLocation, endLocation);
-                }}
-              >
-                Test
-              </button>
+
+
               {/*  TODO: Clear button */}
             </div>
           )}
