@@ -28,23 +28,26 @@ export default function MyMap({ mapData, route }) {
 
   // Function to calculate the color based on street_calm_rate
   const getColor = (streetCalmRate) => {
-    const brightnessFactor = 0.9;  // Reduce brightness to get darker colors. You can adjust this as needed.
+    const brightnessFactor = 0.95;  // Reduce brightness to get darker colors. You can adjust this as needed.
     let red = 0;
     let green = 0;
     const blue = 0;
     
-    if (streetCalmRate <= 0.5) {
+    // Apply a square function to adjust the rate to fit a bell curve distribution
+    const adjustedRate = streetCalmRate <= 0.5 ? Math.pow(streetCalmRate * 2, 2) / 2 : 1 - Math.pow((1 - streetCalmRate) * 2, 2) / 2;
+
+    if (adjustedRate <= 0.5) {
         // transition from red to yellow
-        red = Math.round(255 * brightnessFactor); // Apply brightness reduction
-        green = Math.round(255 * (streetCalmRate / 0.5) * brightnessFactor); // Normalize and reduce brightness
+        red = Math.round(255 * brightnessFactor);
+        green = Math.round(255 * (adjustedRate / 0.5) * brightnessFactor);
     } else {
         // transition from yellow to green
-        red = Math.round(255 * ((1 - streetCalmRate) / 0.5) * brightnessFactor); // Normalize and reduce brightness
-        green = Math.round(255 * brightnessFactor); // Apply brightness reduction
+        red = Math.round(255 * ((1 - adjustedRate) / 0.5) * brightnessFactor);
+        green = Math.round(255 * brightnessFactor);
     }
-    
+
     return `rgb(${red}, ${green}, ${blue})`;
-  };
+};
 
 
 
@@ -61,6 +64,9 @@ export default function MyMap({ mapData, route }) {
     document.getElementById('loading-screen').style.display = 'none';
   }
 
+  // key so that new map is generated
+  const keyData = JSON.stringify(mapData).substr(0, 1000);
+
   return (
     <div style={{ width: '100%', height: '100%' }}>
       <div id="loading-screen"></div>
@@ -68,6 +74,7 @@ export default function MyMap({ mapData, route }) {
         center={centerCoordinates}
         zoom={13}
         style={{ width: "100%", height: "100%" }}
+        key={keyData}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
