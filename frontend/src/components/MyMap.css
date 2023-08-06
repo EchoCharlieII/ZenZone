@@ -1,0 +1,33 @@
+.heatmap-toggle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 9999;
+  }
+  
+  .icon-button-wrapper {
+    background: rgb(249, 249, 249);
+    border-radius: 50%;
+    padding: 2px;
+  }
+
+  .button-container {
+    position: absolute; 
+    right: 4%;
+    white-space: nowrap;
+  }
+
+  .button {
+    background-color: rgb(249, 249, 249);
+    border-radius: 8px;
+    margin: 5px;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}

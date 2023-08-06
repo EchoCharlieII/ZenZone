@@ -2,6 +2,7 @@ import json
 import math
 
 from django.http import JsonResponse
+from django.http import Http404
 from utils import get_path, get_places, get_predictions
 
 
