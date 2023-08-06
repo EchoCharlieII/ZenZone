@@ -78,7 +78,7 @@ def quite_places(request):
         }, safe=False)
 
     place_info = get_places.get_quiet_place_info()
-    cache.set('api_response', place_info, 900)
+    cache.set('place_info', place_info, 900)
 
     return JsonResponse({
         'results': place_info
