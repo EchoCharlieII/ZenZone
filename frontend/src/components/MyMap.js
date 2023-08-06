@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Polyline } from "react-leaflet";
+import { MapContainer, TileLayer, Polyline, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import Loading from "./PageLoading/loading";
 import L from 'leaflet';
@@ -18,6 +18,8 @@ export default function MyMap({ mapData, route }) {
   // Setting the Center Coordinates for New York City
   const centerCoordinates = [40.7899, -73.9524];
   //const [isLoading, setLoading] = useState(true);
+
+  const [quietPlacesData, setQuietPlacesData] = useState({});
 
   // Function to parse the LINESTRING coordinates
   const parseCoordinates = (lineString) => {
@@ -203,7 +205,7 @@ export default function MyMap({ mapData, route }) {
       <div id="loading-screen"></div>
       <MapContainer
         center={centerCoordinates}
-        zoom={13}
+        zoom={12}
         style={{ width: "100%", height: "100%" }}
         key={keyData}
       >
