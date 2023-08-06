@@ -2,6 +2,7 @@ import json
 import math
 
 from django.http import JsonResponse
+from django.http import Http404
 from utils import get_path, get_places, get_predictions
 
 
@@ -73,7 +74,12 @@ def get_near_places(request):
 
 
 def quite_places(request):
+    place_type = request.GET.get('place', None)
     place_info = get_places.get_quiet_place_info()
+    if place_type is not None:
+        place_info = place_info.get(place_type, None)
+        if place_info is None:
+            raise Http404("Place type does not exist")
     return JsonResponse({
         'results': place_info
     }, safe=False)
