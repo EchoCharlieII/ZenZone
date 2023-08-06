@@ -3,6 +3,7 @@ import math
 
 from django.http import JsonResponse
 from utils import get_path, get_places, get_predictions
+from django.core.cache import cache
 
 
 # Create your views here.
@@ -31,11 +32,7 @@ def best_path(request):
     )
     G = get_path.create_street_graph(street_data, data['mode'])
     path = get_path.find_best_path(G, data['source'], data['target'])
-    distance = 0
-    for index in range(len(path) - 1):
-        current_point = path[index]
-        next_point = path[index + 1]
-        distance += get_path.haversine_distance(current_point[0], current_point[1], next_point[0], next_point[1])
+    distance = get_path.calculate_distance(path)
 
     walking_time = distance / 5
 
@@ -73,7 +70,16 @@ def get_near_places(request):
 
 
 def quite_places(request):
+    cached_response = cache.get('place_info')
+
+    if cached_response:
+        return JsonResponse({
+            'results': cached_response
+        }, safe=False)
+
     place_info = get_places.get_quiet_place_info()
+    cache.set('api_response', place_info, 900)
+
     return JsonResponse({
         'results': place_info
     }, safe=False)
@@ -90,10 +96,17 @@ def circular_walking(request):
     desired_walking_time = data['duration']
     user_location = data['source']
     circular_path = get_path.generate_circular_path(G, user_location, desired_walking_time)
+    distance = get_path.calculate_distance(circular_path)
 
+    km = math.floor(distance)
+    meter = math.ceil((distance * 1000) % 1000)
     return JsonResponse(
         {
-            'path': circular_path
+            'path': circular_path,
+            'distance': {
+                'km': km,
+                'meter': meter
+            }
         },
         safe=False
     )

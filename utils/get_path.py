@@ -196,3 +196,12 @@ def generate_circular_path(graph, user_location, desired_walking_time):
 
     # return circular_path
     return random_walk_path
+
+
+def calculate_distance(path):
+    distance = 0
+    for index in range(len(path) - 1):
+        current_point = path[index]
+        next_point = path[index + 1]
+        distance += haversine_distance(current_point[0], current_point[1], next_point[0], next_point[1])
+    return distance

@@ -96,7 +96,6 @@ def get_quiet_place_info():
         json_data = response.json()['businesses']
         for item in json_data:
             tem_dic = {}
-            # print("-----------------------------------------")
             tem_dic['name'] = item['name']
             tem_dic['is_closed'] = item['is_closed']
             tem_dic['url'] = item['url']
