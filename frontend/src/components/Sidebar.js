@@ -283,8 +283,6 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
                 <DateSelector onDateSubmit={setMapData} startLocation={startLocation} endLocation={endLocation} mode={mode}/>
               </div>
 
-
-              {/*  TODO: Clear button */}
             </div>
           )}
         </Menu>

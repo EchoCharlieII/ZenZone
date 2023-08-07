@@ -148,18 +148,14 @@ def find_best_path(graph, source, target):
             edge_attributes = graph.edges[u, v]
             path_and_calm_rate.append(
                 {
-                    "coordinates": u,
+                    "geometry": [u,v],
                     "street_calm_rate": edge_attributes['street_calm_rate']
                 })
-        path_and_calm_rate.append({
-                    "coordinates": path[-1],
-                    "street_calm_rate": graph.edges[path[-2], path[-1]]['street_calm_rate']
-                })
+       
 
         return path_and_calm_rate
     except nx.NetworkXNoPath:
         return None
-
 
 def extract_vertices_from_linestring(wkt_linestring):
     """

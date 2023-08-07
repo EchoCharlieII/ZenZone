@@ -15,20 +15,7 @@ const ApiService = {
         { headers: { "Content-Type": "application/json" } }
       );
 
-      // Parsing the response data
-      function parseResponse(inputData) {
-        const outputData = [];
-
-        for (let i = 0; i < inputData.length - 1; i++) {
-          outputData.push({
-            geometry: [inputData[i], inputData[i + 1]],
-            street_calm_rate: null,
-          });
-        }
-
-        return outputData;
-      };
-      return parseResponse(response.data.path);
+      return response.data;
     } catch (error) {
       console.error("Error:", error);
       throw error;
