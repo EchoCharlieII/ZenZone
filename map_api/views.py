@@ -36,7 +36,8 @@ def best_path(request):
     for index in range(len(path) - 1):
         current_point = path[index]
         next_point = path[index + 1]
-        distance += get_path.haversine_distance(current_point[0], current_point[1], next_point[0], next_point[1])
+        distance += get_path.haversine_distance(current_point['coordinates'][0], current_point['coordinates'][1],
+                                                next_point['coordinates'][0], next_point['coordinates'][1])
 
     walking_time = distance / 5
 

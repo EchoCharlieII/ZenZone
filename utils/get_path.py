@@ -50,6 +50,7 @@ def distance_path(streets_data):
     G = nx.Graph()
     for street in streets_data:
         line = street['geometry']
+        calm_rate = street['street_calm_rate']
         # Extract the latitude and longitude from the line string and create a list of tuples
         # representing the nodes along the street.
         nodes = extract_vertices_from_linestring(line)
@@ -57,7 +58,8 @@ def distance_path(streets_data):
         # Add the street as an edge to the graph and set the busyness as the edge weight.
         for i in range(len(nodes) - 1):
             distance = haversine_distance(nodes[i][0], nodes[i][1], nodes[i + 1][0], nodes[i + 1][1])
-            G.add_edge(nodes[i], nodes[i + 1], weight=distance)
+            edge_attributes = {"street_calm_rate": calm_rate}
+            G.add_edge(nodes[i], nodes[i + 1], weight=distance, **edge_attributes)
 
     return G
 
@@ -74,8 +76,9 @@ def calm_path(streets_data):
 
         # Add the street as an edge to the graph and set the busyness as the edge weight.
         for i in range(len(nodes) - 1):
+            edge_attributes = {"street_calm_rate": calm_rate}
             # more focus on calm
-            G.add_edge(nodes[i], nodes[i + 1], weight=(1 - calm_rate))
+            G.add_edge(nodes[i], nodes[i + 1], weight=(1 - calm_rate), **edge_attributes)
     return G
 
 
@@ -92,8 +95,9 @@ def balance_path(streets_data):
         # Add the street as an edge to the graph and set the busyness as the edge weight.
         for i in range(len(nodes) - 1):
             distance = haversine_distance(nodes[i][0], nodes[i][1], nodes[i + 1][0], nodes[i + 1][1])
+            edge_attributes = {"street_calm_rate": calm_rate}
             # more focus on calm
-            G.add_edge(nodes[i], nodes[i + 1], weight=(1 - calm_rate) * distance)
+            G.add_edge(nodes[i], nodes[i + 1], weight=(1 - calm_rate) * distance, **edge_attributes)
     return G
 
 
@@ -138,7 +142,21 @@ def find_best_path(graph, source, target):
     nearest_crossing = find_nearest_crossing_points(graph, source, target)
     try:
         path = nx.shortest_path(graph, source=nearest_crossing[0], target=nearest_crossing[1], weight='weight')
-        return path
+
+        path_and_calm_rate = []
+        for u, v in zip(path, path[1:]):
+            edge_attributes = graph.edges[u, v]
+            path_and_calm_rate.append(
+                {
+                    "coordinates": u,
+                    "street_calm_rate": edge_attributes['street_calm_rate']
+                })
+        path_and_calm_rate.append({
+                    "coordinates": path[-1],
+                    "street_calm_rate": graph.edges[path[-2], path[-1]]['street_calm_rate']
+                })
+
+        return path_and_calm_rate
     except nx.NetworkXNoPath:
         return None
 
@@ -190,9 +208,6 @@ def generate_circular_path(graph, user_location, desired_walking_time):
 
     # Step 2 and 3: Perform a random walk
     random_walk_path = random_walk(graph, nearest_user_crossing, desired_walking_time)
-
-    # Step 4: Optimize the path to form a circle
-    # circular_path = optimize_path(graph, random_walk_path)
 
     # return circular_path
     return random_walk_path
