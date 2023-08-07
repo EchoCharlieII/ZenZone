@@ -28,33 +28,34 @@ const Home = () => {
         setSection2Opacity(progress);
         console.log("section2 opacity:", section2.current.style.opacity);  // <- for debugging
     };
-
     useEffect(() => {
         // Disable the default scroll
         document.body.style.overflow = 'hidden';
-
         // Get the window height
         windowH = window.innerHeight;
-
-        // Listen to the wheel event
-        window.addEventListener('wheel', (e) => {
-            // Update the scroll position
-            scrollPos += e.deltaY;
-
-            // Make sure the scroll position is not outside the boundaries
-            if (scrollPos < 0) scrollPos = 0;
-            else if (scrollPos > windowH) scrollPos = windowH;
-
-            // Update the elements
-            updateElements();
-        });
-
-        // Update the elements based on the initial scroll position
+    
+        let startTouchY = 0;
+        let endTouchY = 0;
+    
+         // Listen to the wheel and touch event
+        window.addEventListener('wheel', onScroll, false);
+        window.addEventListener('touchstart', (e) => {
+            startTouchY = e.touches[0].clientY;
+        }, false);
+        window.addEventListener('touchmove', (e) => {
+            endTouchY = e.touches[0].clientY;
+            onScroll({ deltaY: startTouchY - endTouchY });
+        }, false);
+        window.addEventListener('touchend', () => {
+            startTouchY = 0;
+            endTouchY = 0;
+        }, false);
+    
+        // Update the elements
         updateElements();
-
         // Set initial opacity of section 2 to 0
         gsap.set(section2.current, { opacity: 0 });
-
+    
         // Listen to the transitionend event
         section2.current.addEventListener('transitionend', (e) => {
             // If the transitioned property is 'opacity' and the new opacity is '1'...
@@ -65,6 +66,20 @@ const Home = () => {
                 });
             }
         });
+    
+        function onScroll(e) {
+            scrollPos += e.deltaY;
+            if (scrollPos < 0) scrollPos = 0;
+            else if (scrollPos > windowH) scrollPos = windowH;
+            updateElements();
+        }
+    
+        return () => {
+            window.removeEventListener('wheel', onScroll, false);
+            window.removeEventListener('touchstart', () => {}, false);
+            window.removeEventListener('touchmove', () => {}, false);
+            window.removeEventListener('touchend', () => {}, false);
+        }
     }, []);
 
     useEffect(() => {
