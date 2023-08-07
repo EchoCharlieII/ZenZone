@@ -14,8 +14,21 @@ const ApiService = {
         },
         { headers: { "Content-Type": "application/json" } }
       );
-      console.log("Data:", response.data);
-      return response;
+
+      // Parsing the response data
+      function parseResponse(inputData) {
+        const outputData = [];
+
+        for (let i = 0; i < inputData.length - 1; i++) {
+          outputData.push({
+            geometry: [inputData[i], inputData[i + 1]],
+            street_calm_rate: null,
+          });
+        }
+
+        return outputData;
+      };
+      return parseResponse(response.data.path);
     } catch (error) {
       console.error("Error:", error);
       throw error;
@@ -34,7 +47,24 @@ const ApiService = {
         { date }
       );
 
-      return response;
+      // Function to parse the LINESTRING coordinates
+      function parseResponse(inputData) {
+        return inputData.map(item => {
+          // Extract the coordinates from the "geometry" string
+          // Assuming lineString is in the format: 'LINESTRING (lon1 lat1, lon2 lat2, ...)'
+          const coordinates = item.geometry
+            .replace("LINESTRING (", "")
+            .replace(")", "")
+            .split(", ")
+            .map(coord => coord.split(" ").reverse().map(Number));
+      
+          return {
+            "geometry": coordinates,
+            "street_calm_rate": item.street_calm_rate
+          };
+        });
+      };
+      return parseResponse(response.data);
     } catch (error) {
       if (document.getElementById("loading-screen")) {
         document.getElementById("loading-screen").style.display = "none";

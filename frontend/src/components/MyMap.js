@@ -38,6 +38,10 @@ export default function MyMap({ mapData, route }) {
 
   // Function to calculate the color based on street_calm_rate
   const getColor = (streetCalmRate) => {
+    if (streetCalmRate === null) {
+      return "green"; // default color
+    }
+
     const brightnessFactor = 0.95;  // Reduce brightness to get darker colors. You can adjust this as needed.
     let red = 0;
     let green = 0;
@@ -58,7 +62,6 @@ export default function MyMap({ mapData, route }) {
 
     return `rgb(${red}, ${green}, ${blue})`;
 };
-
 
 
   // Limit the number of objects to render on the map (80,000 in this case)
@@ -188,7 +191,7 @@ export default function MyMap({ mapData, route }) {
       </div>
 
       <div className="heatmap-toggle">
-        <Tooltip title="Show/Hide Heatmap">
+        <Tooltip title="Show/Hide Route">
           <div className="icon-button-wrapper">
             <IconButton
               onClick={() => setShowPolylines(!showPolylines)}
@@ -212,23 +215,22 @@ export default function MyMap({ mapData, route }) {
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution="Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors"
-        />
-        <Polyline positions={limitedMapData} color="blue" />
-
-        {/* {limitedMapData.map((item, index) => {
-          const coordinates = parseCoordinates(item.geometry);
-          const streetCalmRate = item.street_calm_rate;
-          const color = getColor(streetCalmRate);
-
-          return <Polyline key={index} positions={coordinates} color={color} />;
-        })} */}
+        />        
 
         {renderMarkers()}
 
+        {/* standard format of mapData:
+        [
+          {
+            "geometry": [[float,float],[float,float]],
+            "street_calm_rate": float
+          },
+          ...
+        ]
+        */}
         {showPolylines && limitedMapData.map((item, index) => {
-          const coordinates = parseCoordinates(item.geometry);
-          const streetCalmRate = item.street_calm_rate;
-          const color = getColor(streetCalmRate);
+          const coordinates = item.geometry;
+          const color = getColor(item.street_calm_rate);
 
           return <Polyline key={index} positions={coordinates} color={color} />;
         })}

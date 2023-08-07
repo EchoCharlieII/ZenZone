@@ -15,18 +15,17 @@ export default function Map() {
   const [mapData, setMapData] = useState([]);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
-  // useEffect(() => {
-  //   // This code runs after the component is mounted
-  //   ApiService.submitDate(new Date())
-  //   .then((response) => {
-  //       console.log("Api Response:", response.data);
-  //       setMapData(response.data); // Pass the data to the parent component
-  //   })
-  //   .catch((error) => {
-  //       console.error("Error:", error);
-  //   });
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  useEffect(() => {
+    // This code runs after the component is mounted
+    ApiService.submitDate(new Date())
+    .then((response) => {
+        setMapData(response); // Pass the data to the parent component
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);

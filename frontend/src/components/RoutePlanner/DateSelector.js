@@ -17,9 +17,8 @@ export default function DateSelector({ onDateSubmit, startLocation, endLocation 
     if (selectedDate && startLocation && endLocation && mode) {
       ApiService.renderBestRoute(selectedDate, startLocation, endLocation, mode)
         .then((response) => {
-          console.log("Api Response:", response.data.path);
-          setMapData(response.data.path); // Set received data to the state variable
-          onDateSubmit(response.data.path); // Pass the data to the parent component
+          setMapData(response); // Set received data to the state variable
+          onDateSubmit(response); // Pass the data to the parent component
         })
         .catch((error) => {
           console.error("Error:", error);
