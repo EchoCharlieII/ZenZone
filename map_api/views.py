@@ -33,16 +33,11 @@ def best_path(request):
     G = get_path.create_street_graph(street_data, data['mode'])
     path = get_path.find_best_path(G, data['source'], data['target'])
     distance = 0
-    # for index in range(len(path) - 1):
-    #     current_point = path[index]
-    #     next_point = path[index + 1]
-    #     distance += get_path.haversine_distance(current_point['geometry'][0], current_point['geometry'][1],
-    #                                             next_point['geometry'][0], next_point['geometry'][1])
 
     for route in path:
-        distance += get_path.haversine_distance(route['geometry'][0][0], 
-                                                route['geometry'][0][1], 
-                                                route['geometry'][1][0], 
+        distance += get_path.haversine_distance(route['geometry'][0][0],
+                                                route['geometry'][0][1],
+                                                route['geometry'][1][0],
                                                 route['geometry'][1][1])
 
     walking_time = distance / 5
@@ -111,9 +106,21 @@ def circular_walking(request):
     user_location = data['source']
     circular_path = get_path.generate_circular_path(G, user_location, desired_walking_time)
 
+    # distance = 0
+    # for index in range(len(circular_path) - 1):
+    #     current_point = circular_path[index]
+    #     next_point = circular_path[index + 1]
+    #     distance += get_path.haversine_distance(current_point['coordinates'][0][0], current_point['coordinates'][0][1],
+    #                                             next_point['coordinates'][1][0], next_point['coordinates'][1][1])
+    # km = math.floor(distance)
+    # meter = math.ceil((distance * 1000) % 1000)
     return JsonResponse(
         {
             'path': circular_path
+            # 'distance': {
+            #     'km': km,
+            #     'meter': meter
+            # }
         },
         safe=False
     )

@@ -148,14 +148,13 @@ def find_best_path(graph, source, target):
             edge_attributes = graph.edges[u, v]
             path_and_calm_rate.append(
                 {
-                    "geometry": [u,v],
+                    "geometry": [u, v],
                     "street_calm_rate": edge_attributes['street_calm_rate']
                 })
-       
-
         return path_and_calm_rate
     except nx.NetworkXNoPath:
         return None
+
 
 def extract_vertices_from_linestring(wkt_linestring):
     """
@@ -180,11 +179,16 @@ def extract_vertices_from_linestring(wkt_linestring):
 def random_walk(graph, starting_node, desired_time):
     current_node = starting_node
     total_time = 0
-    forward_path = [current_node]
+    forward_path = []
 
     while total_time < (desired_time / 2):
         neighboring_crossings = list(graph.neighbors(current_node))
         next_node = random.choice(neighboring_crossings)
+        forward_path.append(
+            {
+                "geometry": current_node,
+                "street_calm_rate": graph.edges[current_node, next_node]['street_calm_rate']
+            })
         distance = haversine_distance(current_node[0], current_node[1], next_node[0], next_node[1])
         # edge_data = graph.get_edge_data(current_node, next_node)
         walking_time = math.ceil((distance / 5) * 60)  # Use busyness or other factors to estimate walking time
