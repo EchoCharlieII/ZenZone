@@ -30,4 +30,10 @@
   .button:hover {
     transform: scale(1.1);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    background-color: rgb(225, 225, 225);
+}
+
+.button.selected {
+    background-color: #3D5339;
+    color: #F9F9F9;
 }
