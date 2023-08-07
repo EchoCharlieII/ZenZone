@@ -32,21 +32,14 @@ def best_path(request):
     )
     G = get_path.create_street_graph(street_data, data['mode'])
     path = get_path.find_best_path(G, data['source'], data['target'])
-    distance = 0
 
-    for route in path:
-        distance += get_path.haversine_distance(route['geometry'][0][0],
-                                                route['geometry'][0][1],
-                                                route['geometry'][1][0],
-                                                route['geometry'][1][1])
+    distance, km, meter = get_path.format_distance(path)
 
     walking_time = distance / 5
 
     hour = math.floor(walking_time)
     minute = math.ceil((walking_time * 60) % 60)
 
-    km = math.floor(distance)
-    meter = math.ceil((distance * 1000) % 1000)
     return JsonResponse({
         'mode': data['mode'],
         'path': path,
@@ -106,21 +99,19 @@ def circular_walking(request):
     user_location = data['source']
     circular_path = get_path.generate_circular_path(G, user_location, desired_walking_time)
 
-    # distance = 0
-    # for index in range(len(circular_path) - 1):
-    #     current_point = circular_path[index]
-    #     next_point = circular_path[index + 1]
-    #     distance += get_path.haversine_distance(current_point['coordinates'][0][0], current_point['coordinates'][0][1],
-    #                                             next_point['coordinates'][1][0], next_point['coordinates'][1][1])
-    # km = math.floor(distance)
-    # meter = math.ceil((distance * 1000) % 1000)
+    distance, km, meter = get_path.format_distance(circular_path)
+
     return JsonResponse(
         {
-            'path': circular_path
-            # 'distance': {
-            #     'km': km,
-            #     'meter': meter
-            # }
+            'path': circular_path,
+            'time': {
+                'hour': (data['duration'] // 60),
+                'minute': (data['duration'] % 60),
+            },
+            'distance': {
+                'km': km,
+                'meter': meter
+            }
         },
         safe=False
     )

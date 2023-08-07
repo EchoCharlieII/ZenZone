@@ -186,16 +186,15 @@ def random_walk(graph, starting_node, desired_time):
         next_node = random.choice(neighboring_crossings)
         forward_path.append(
             {
-                "geometry": current_node,
+                "geometry": [current_node, next_node],
                 "street_calm_rate": graph.edges[current_node, next_node]['street_calm_rate']
             })
         distance = haversine_distance(current_node[0], current_node[1], next_node[0], next_node[1])
-        # edge_data = graph.get_edge_data(current_node, next_node)
+
         walking_time = math.ceil((distance / 5) * 60)  # Use busyness or other factors to estimate walking time
         total_time += walking_time
 
         current_node = next_node
-        forward_path.append(current_node)
     back_path = find_best_path(graph, current_node, starting_node)
 
     return forward_path + back_path
@@ -211,3 +210,15 @@ def generate_circular_path(graph, user_location, desired_walking_time):
 
     # return circular_path
     return random_walk_path
+
+
+def format_distance(path):
+    distance = 0
+    for route in path:
+        distance += haversine_distance(route['geometry'][0][0],
+                                       route['geometry'][0][1],
+                                       route['geometry'][1][0],
+                                       route['geometry'][1][1])
+    km = math.floor(distance)
+    meter = math.ceil((distance * 1000) % 1000)
+    return distance, km, meter
