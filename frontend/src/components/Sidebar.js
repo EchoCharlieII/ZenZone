@@ -287,39 +287,6 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
               {/*  TODO: Clear button */}
             </div>
           )}
-          <MenuItem 
-            onClick={() => {
-              toggleGemItems();
-              if (!isSidebarOpen) {
-                toggleSidebar();
-              }
-            }} 
-            icon={<DiamondOutlinedIcon />}
-          >
-            Hidden Gems
-          </MenuItem>
-          {showGemItems && (
-            <>
-              <MenuItem
-                className="gem-menu-item"
-                icon={<LocalCafeOutlinedIcon />}
-              >
-                Cafes for Serenity Seekers
-              </MenuItem>
-              <MenuItem className="gem-menu-item" icon={<MuseumOutlinedIcon />}>
-                Museums for Quiet Contemplation
-              </MenuItem>
-              <MenuItem
-                className="gem-menu-item"
-                icon={<LocalLibraryOutlinedIcon />}
-              >
-                Libraries for Focused Study
-              </MenuItem>
-              <MenuItem className="gem-menu-item" icon={<ParkOutlinedIcon />}>
-                Parks for Idyllic Breaks
-              </MenuItem>
-            </>
-          )}
         </Menu>
       </ProSidebar>
     </div>
