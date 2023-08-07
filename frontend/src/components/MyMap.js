@@ -168,25 +168,26 @@ export default function MyMap({ mapData, route }) {
           </Marker>
         );
       });
-  };
+    };
+
+  const [selectedButton, setSelectedButton] = useState(null);
 
 
   return (
     <div style={{ width: '100%', height: '100%' }}>
       <div className="button-container" style={{ position: 'absolute', zIndex: 1000, padding: '10px' }}>
         
-        <button className="button" style={{ backgroundColor: 'rgb(249, 249, 249)', borderRadius: '8px' }} onClick={() => { fetchQuietPlacesData(['cafe']); }}>Cozy Cafes</button>
+        <button className={`button ${selectedButton === 'cafe' ? 'selected' : ''}`} onClick={() => { setSelectedButton(prev => prev === 'cafe' ? null : 'cafe'); fetchQuietPlacesData(['cafe']); }}>Cozy Cafes</button>
 
+        <button className={`button ${selectedButton === 'library' ? 'selected' : ''}`} onClick={() => { setSelectedButton(prev => prev === 'library' ? null : 'library'); fetchQuietPlacesData(['library']); }}>Quiet Libraries</button>
 
-        <button className="button" style={{ backgroundColor: 'rgb(249, 249, 249)', borderRadius: '8px' }} onClick={() => { fetchQuietPlacesData(['library']); }}>Quiet Libraries</button>
+        <button className={`button ${selectedButton === 'museum' ? 'selected' : ''}`} onClick={() => { setSelectedButton(prev => prev === 'museum' ? null : 'museum'); fetchQuietPlacesData(['museum']); }}>Timeless Museums</button>
 
-        <button className="button" style={{ backgroundColor: 'rgb(249, 249, 249)', borderRadius: '8px' }} onClick={() => { fetchQuietPlacesData(['museum']); }}>Timeless Museums</button>
+        <button className={`button ${selectedButton === 'read_place' ? 'selected' : ''}`} onClick={() => { setSelectedButton(prev => prev === 'read_place' ? null : 'read_place'); fetchQuietPlacesData(['read_place']); }}>Reading Spots</button>
 
-        <button className="button" style={{ backgroundColor: 'rgb(249, 249, 249)', borderRadius: '8px' }} onClick={() => { fetchQuietPlacesData(['read_place']); }}>Reading Spots</button>
+        <button className={`button ${selectedButton === 'study_place' ? 'selected' : ''}`} onClick={() => { setSelectedButton(prev => prev === 'study_place' ? null : 'study_place'); fetchQuietPlacesData(['library']); }}>Study Spaces</button>
 
-        <button className="button" style={{ backgroundColor: 'rgb(249, 249, 249)', borderRadius: '8px' }} onClick={() => { fetchQuietPlacesData(['study_place']); }}>Study Spaces</button>
-
-        <button className="button" style={{ backgroundColor: 'rgb(249, 249, 249)', borderRadius: '8px' }} onClick={() => { setQuietPlacesData({ results: [] });  fetchQuietPlacesData(['secret_spot', 'secluded_spot']); }}>Hidden Gems</button>
+        <button className={`button ${selectedButton === 'hidden_gems' ? 'selected' : ''}`} onClick={() => { setSelectedButton(prev => prev === 'hidden_gems' ? null : 'hidden_gems'); fetchQuietPlacesData(['secret_spot', 'secluded_spot']); }}>Hidden Gems</button>
 
       </div>
 
