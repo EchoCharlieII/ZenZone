@@ -15,6 +15,8 @@ import opencage from "opencage-api-client";
 import Autosuggest from "react-autosuggest";
 import ModeSelectMenu from "./RoutePlanner/ModeSelectMenu";
 import ApiService from "../services/ApiService";
+import CustomDatePicker from "./RoutePlanner/CustomDatePicker";
+import TimeInput from "./CircularWalk/TimeInput";
 
 
 export default function Sidebar({ onLocationsSelected, setMapData }) {
@@ -97,7 +99,7 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
     };
   
   const inputPropsOrigin = {
-    placeholder: "Search a location...",
+    placeholder: "Search a start location...",
     value: valueOrigin,
     onChange: (_, { newValue }) => {
       setValueOrigin(newValue);
@@ -135,6 +137,95 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
   const renderSuggestionOrigin = (suggestion) => <div>{suggestion.name}</div>;
 
   const renderSuggestionDestination = (suggestion) => (<div>{suggestion.name}</div>);
+
+
+
+
+
+// For circular walk feature
+const [circularWalkDate, setCircularWalkDate] = useState(null);
+const [circularWalkLocation, setCircularWalkLocation] = useState(null);
+const [circularWalkTime, setCircularWalkTime] = useState(null);
+
+const [cwLength, setCwLength] = useState(null);
+
+const [valueCW, setValueCW] = useState("");
+const [suggestionsCW, setSuggestionsCW] = useState([]);
+
+const onSuggestionSelectedCW = (event, { suggestion }) => {
+  setCircularWalkLocation(suggestion.latlng);
+};
+
+const fetchCW = ({ value }) => {
+  opencage
+    .geocode({ 
+      key: "378bbab421b943cc95ef067c6295c57a", 
+      q: value, 
+      bounds: [
+        [-74.25909, 40.477399], // southwest corner
+        [-73.700272, 40.917577] // northeast corner
+      ] 
+    })
+    .then((response) => {
+      const { results } = response;
+      setSuggestionsCW(
+        results.map((result) => ({
+          name: result.formatted,
+          latlng: [result.geometry.lat, result.geometry.lng],
+        }))
+      );
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+  };
+
+  const inputPropsCW = {
+    placeholder: "Search a location...",
+    value: valueCW,
+    onChange: (_, { newValue }) => {
+      setValueCW(newValue);
+    },
+  };
+
+  const onSuggestionsFetchRequestedCW = ({ value }) => {
+    fetchCW({ value });
+  };
+
+  const onSuggestionsClearRequestedCW = () => {
+    setSuggestionsCW([]);
+  };
+
+  const getSuggestionValueCW = (suggestion) => suggestion.name;
+
+  const renderSuggestionCW = (suggestion) => <div>{suggestion.name}</div>;
+
+  const handleCWDateChange = (date) => {
+    setCircularWalkDate(date);
+  };
+
+  const handleTimeChange = (value) => {
+    setCircularWalkTime(value);
+  };
+
+function grapDataFromApi() {
+
+  ApiService.circularWalking(circularWalkDate, circularWalkLocation, circularWalkTime)
+  .then((response) => {
+    setMapData(response.path);
+    setCwLength(response.distance);
+  })
+  .catch((error) => {
+    console.error("Error:", error);
+  });
+}
+// For circular walk feature
+
+
+
+
+
+
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
@@ -191,7 +282,7 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
               <p style={{ fontSize: "16px" }}>
                 Select starting and ending points:
               </p>
-              
+
               <Autosuggest
                 suggestions={suggestionsOrigin}
                 onSuggestionsFetchRequested={onSuggestionsFetchRequestedOrigin}
@@ -203,6 +294,7 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
                 theme={{
                   suggestionsList: {
                     listStyleType: "none", // Removes bullet points
+                    marginLeft: "-35px",
                   },
                   suggestion: {
                     fontSize: "14px", // Sets font size to 14px
@@ -212,12 +304,8 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
 
               <Autosuggest
                 suggestions={suggestionsDestination}
-                onSuggestionsFetchRequested={
-                  onSuggestionsFetchRequestedDestination
-                }
-                onSuggestionsClearRequested={
-                  onSuggestionsClearRequestedDestination
-                }
+                onSuggestionsFetchRequested={onSuggestionsFetchRequestedDestination}
+                onSuggestionsClearRequested={onSuggestionsClearRequestedDestination}
                 getSuggestionValue={getSuggestionValueDestination}
                 renderSuggestion={renderSuggestionDestination}
                 inputProps={inputPropsDestination}
@@ -228,7 +316,7 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
                     marginLeft: "-35px",
                   },
                   suggestion: {
-                    fontSize: "13px", // Sets font size to 14px
+                    fontSize: "14px", // Sets font size to 14px
                   },
                 }}
               />
@@ -245,15 +333,6 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
             </div>
           )}
 
-          <button onClick={() => {
-            ApiService.circularWalking(new Date(), [40.782358, -73.965374], 60)
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });}
-        }>Test</button>
           
           <MenuItem 
             onClick={() => {
@@ -268,8 +347,44 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
           </MenuItem>
           
           {showCW && (
-            <p>Hello World</p>
-          )}
+              <div className="circular-walking">
+
+              <p style={{ fontSize: "16px" }}>
+                Select your current location:
+              </p>
+
+              <Autosuggest
+              suggestions={suggestionsCW}
+              onSuggestionsFetchRequested={onSuggestionsFetchRequestedCW}
+              onSuggestionsClearRequested={onSuggestionsClearRequestedCW}
+              getSuggestionValue={getSuggestionValueCW}
+              renderSuggestion={renderSuggestionCW}
+              inputProps={inputPropsCW}
+              onSuggestionSelected={onSuggestionSelectedCW}
+              theme={{
+                suggestionsList: {
+                  listStyleType: "none", // Removes bullet points
+                  marginLeft: "-35px",
+                },
+                suggestion: {
+                  fontSize: "14px", // Sets font size to 14px
+                },
+              }}
+            />
+            <br />
+              <p style={{ fontSize: "16px" }}>
+                Enter your wanted walking time (in minutes):
+              </p>
+              <TimeInput onValueChange={handleTimeChange} />
+              <br />
+              <CustomDatePicker onDateChange={handleCWDateChange} />
+              <br />
+              <p style={{fontFamily: "initial", fontSize: 3}}>{cwLength ? "Length: " + cwLength["km"] + "." + cwLength["meter"] + " km" : ""}</p>
+              <br />
+              <button onClick={grapDataFromApi}>Submit</button>
+
+            </div>
+        )}
 
         </Menu>
       </ProSidebar>

@@ -40,6 +40,16 @@ margin: 5px;
 padding-left: 60px;
 }
 
+.circular-walking {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start; 
+  height: 100%;
+  margin: 5px;
+  padding-left: 60px;
+}
+
 /* Loading screen: */
 
 #loading-screen {
