@@ -93,11 +93,12 @@ def circular_walking(request):
     street_data = get_predictions.formatted_prediction_data(
         get_predictions.get_prediction_result(data['date'])
     )
-    G = get_path.create_street_graph(street_data, 'balance')
+    G = get_path.create_street_graph(street_data, 'calm')
+    back_graph = get_path.create_street_graph(street_data, 'distance')
 
     desired_walking_time = data['duration']
     user_location = data['source']
-    circular_path = get_path.generate_circular_path(G, user_location, desired_walking_time)
+    circular_path = get_path.generate_circular_path(G, back_graph, user_location, desired_walking_time)
 
     distance, km, meter = get_path.format_distance(circular_path)
 
