@@ -280,7 +280,7 @@ function grapDataFromApi() {
             <div className="autosuggest-form">
 
               <p style={{ fontSize: "16px" }}>
-                Select starting and ending points:
+                Select start and destination:
               </p>
 
               <Autosuggest

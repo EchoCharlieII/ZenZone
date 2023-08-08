@@ -6,8 +6,8 @@ import "./DateSelector.css";
 
 export default function CustomDatePicker({ onDateChange }) {
   // The selectedDate can be changed, therefore we need to use useState
-  const [selectedDate, setSelectedDate] = useState(null);
-
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  
   const handleDateChange = (date) => {
     setSelectedDate(date);
     onDateChange(date); // Call the onDateChange prop
@@ -15,7 +15,7 @@ export default function CustomDatePicker({ onDateChange }) {
 
   return (
     <div>
-      <p style={{ fontSize: "16px" }}>Select a Date:</p>
+      <p style={{ fontSize: "16px" }}>Select Date and Time:</p>
       <DatePicker
         selected={selectedDate}
         onChange={handleDateChange}

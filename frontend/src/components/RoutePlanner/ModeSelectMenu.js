@@ -12,7 +12,6 @@ export default function ModeSelectMenu({ onSelectionChange }) {
   return (
     <div>
       <select value={value} onChange={handleChange}>
-        <option value=""></option>
         <option value="balance">Balance mode</option>
         <option value="distance">I want to walk faster</option>
         <option value="calm">I want to walk calmer</option>
