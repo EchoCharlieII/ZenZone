@@ -82,7 +82,11 @@ export default function MyMap({ mapData, route }) {
   const keyData = JSON.stringify(mapData).substr(0, 1000);
 
   // New function for fetching quiet places data
-  const fetchQuietPlacesData = async (placeTypes) => {  
+  const fetchQuietPlacesData = async (placeTypes) => {
+    if (placeTypes.length === 0) {
+      setQuietPlacesData({});
+      return;
+    }  
     try {
       const requests = placeTypes.map(placeType => fetch(`http://localhost:8000/map-api/quiet-place-info?place=${placeType}`));
       const responses = await Promise.all(requests);
@@ -180,17 +184,89 @@ export default function MyMap({ mapData, route }) {
       
         <button id="only-mobile" className={`button ${areButtonsVisible ? 'selected' : ''}`} onClick={() => setButtonsVisible(!areButtonsVisible)}>Hidden Gems</button>
 
-        <button id="hidden-gem-button" className={`button ${areButtonsVisible ? '' : 'hidden'} ${selectedButton === 'cafe' ? 'selected' : ''}`} onClick={() => { setSelectedButton(prev => prev === 'cafe' ? null : 'cafe'); fetchQuietPlacesData(['cafe']); }}>Cozy Cafes</button>
+        <button 
+          id="hidden-gem-button" 
+          className={`button ${areButtonsVisible ? '' : 'hidden'} ${selectedButton === 'cafe' ? 'selected' : ''}`} 
+          onClick={() => { 
+            setSelectedButton(prev => {
+              const newValue = prev === 'cafe' ? null : 'cafe'; 
+              fetchQuietPlacesData(newValue === 'cafe' ? ['cafe'] : []); 
+              return newValue; 
+            });
+          }}
+        >
+          Cozy Cafes
+        </button>
 
-        <button id="hidden-gem-button" className={`button ${areButtonsVisible ? '' : 'hidden'} ${selectedButton === 'library' ? 'selected' : ''}`} onClick={() => { setSelectedButton(prev => prev === 'library' ? null : 'library'); fetchQuietPlacesData(['library']); }}>Quiet Libraries</button>
+        <button 
+          id="hidden-gem-button" 
+          className={`button ${areButtonsVisible ? '' : 'hidden'} ${selectedButton === 'library' ? 'selected' : ''}`} 
+          onClick={() => { 
+            setSelectedButton(prev => {
+              const newValue = prev === 'library' ? null : 'library'; 
+              fetchQuietPlacesData(newValue === 'library' ? ['library'] : []); 
+              return newValue; 
+            });
+          }}
+        >
+          Quiet Libraries
+        </button>
 
-        <button id="hidden-gem-button" className={`button ${areButtonsVisible ? '' : 'hidden'} ${selectedButton === 'museum' ? 'selected' : ''}`} onClick={() => { setSelectedButton(prev => prev === 'museum' ? null : 'museum'); fetchQuietPlacesData(['museum']); }}>Timeless Museums</button>
+        <button 
+          id="hidden-gem-button" 
+          className={`button ${areButtonsVisible ? '' : 'hidden'} ${selectedButton === 'museum' ? 'selected' : ''}`} 
+          onClick={() => { 
+            setSelectedButton(prev => {
+              const newValue = prev === 'museum' ? null : 'museum'; 
+              fetchQuietPlacesData(newValue === 'museum' ? ['museum'] : []); 
+              return newValue; 
+            });
+          }}
+        >
+          Timeless Museums
+        </button>
 
-        <button id="hidden-gem-button" className={`button ${areButtonsVisible ? '' : 'hidden'} ${selectedButton === 'read_place' ? 'selected' : ''}`} onClick={() => { setSelectedButton(prev => prev === 'read_place' ? null : 'read_place'); fetchQuietPlacesData(['read_place']); }}>Reading Spots</button>
+        <button 
+          id="hidden-gem-button" 
+          className={`button ${areButtonsVisible ? '' : 'hidden'} ${selectedButton === 'read_place' ? 'selected' : ''}`} 
+          onClick={() => { 
+            setSelectedButton(prev => {
+              const newValue = prev === 'read_place' ? null : 'read_place'; 
+              fetchQuietPlacesData(newValue === 'read_place' ? ['read_place'] : []); 
+              return newValue; 
+            });
+          }}
+        >
+          Reading Corners
+        </button>
 
-        <button id="hidden-gem-button" className={`button ${areButtonsVisible ? '' : 'hidden'} ${selectedButton === 'study_place' ? 'selected' : ''}`} onClick={() => { setSelectedButton(prev => prev === 'study_place' ? null : 'study_place'); fetchQuietPlacesData(['library']); }}>Study Spaces</button>
+        <button 
+          id="hidden-gem-button" 
+          className={`button ${areButtonsVisible ? '' : 'hidden'} ${selectedButton === 'study_place' ? 'selected' : ''}`} 
+          onClick={() => { 
+            setSelectedButton(prev => {
+              const newValue = prev === 'study_place' ? null : 'study_place'; 
+              fetchQuietPlacesData(newValue === 'study_place' ? ['study_space'] : []); 
+              return newValue; 
+            });
+          }}
+        >
+          Study Spaces
+        </button>
 
-        <button id="hidden-gem-button" className={`button ${areButtonsVisible ? '' : 'hidden'} ${selectedButton === 'hidden_gems' ? 'selected' : ''}`} onClick={() => { setSelectedButton(prev => prev === 'hidden_gems' ? null : 'hidden_gems'); fetchQuietPlacesData(['secret_spot', 'secluded_spot']); }}>Hidden Gems</button>
+        <button 
+          id="hidden-gem-button" 
+          className={`button ${areButtonsVisible ? '' : 'hidden'} ${selectedButton === 'hidden_gems' ? 'selected' : ''}`} 
+          onClick={() => { 
+            setSelectedButton(prev => {
+              const newValue = prev === 'hidden_gems' ? null : 'hidden_gems'; 
+              fetchQuietPlacesData(newValue === 'hidden_gems' ? ['secret_spot', 'secluded_spot'] : []); 
+              return newValue; 
+            });
+          }}
+        >
+          Secret Sanctuaries
+        </button>
 
       </div>
 
