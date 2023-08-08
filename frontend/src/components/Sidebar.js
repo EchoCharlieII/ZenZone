@@ -250,12 +250,35 @@ function grapDataFromApi() {
   //   }
   // }, [startLocation, endLocation, onLocationsSelected]);
 
+  const useViewportWidth = () => {
+    const [width, setWidth] = useState(window.innerWidth);
+
+    useEffect(() => {
+        const handleResize = () => setWidth(window.innerWidth);
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    return width;
+  }
+
+  const viewportWidth = useViewportWidth();
+
+  const determineWidth = () => {
+    if (viewportWidth <= 720) {
+        return isSidebarOpen ? "100vw" : "80px";
+    } else {
+        return isSidebarOpen ? "380px" : "80px";
+    }
+};
+
   return (
     <div id="app">
       <ProSidebar
         className="pro-sidebar"
         collapsed={!isSidebarOpen}
-        width={isSidebarOpen ? "380px" : "80px"}
+        width={determineWidth()}
       >
         <Menu>
           <MenuItem onClick={toggleSidebar} icon={<MenuOutlinedIcon />}>

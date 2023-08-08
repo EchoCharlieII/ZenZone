@@ -171,28 +171,31 @@ export default function MyMap({ mapData, route }) {
     };
 
   const [selectedButton, setSelectedButton] = useState(null);
+  const [areButtonsVisible, setButtonsVisible] = useState(false);
 
 
   return (
     <div style={{ width: '100%', height: '100%' }}>
-      <div className="button-container" style={{ position: 'absolute', zIndex: 1000, padding: '10px' }}>
-        
-        <button className={`button ${selectedButton === 'cafe' ? 'selected' : ''}`} onClick={() => { setSelectedButton(prev => prev === 'cafe' ? null : 'cafe'); fetchQuietPlacesData(['cafe']); }}>Cozy Cafes</button>
+      <div className="button-container" style={{ position: 'absolute', zIndex: 900, padding: '10px' }}>
+      
+        <button id="only-mobile" className={`button ${areButtonsVisible ? 'selected' : ''}`} onClick={() => setButtonsVisible(!areButtonsVisible)}>Hidden Gems</button>
 
-        <button className={`button ${selectedButton === 'library' ? 'selected' : ''}`} onClick={() => { setSelectedButton(prev => prev === 'library' ? null : 'library'); fetchQuietPlacesData(['library']); }}>Quiet Libraries</button>
+        <button id="hidden-gem-button" className={`button ${areButtonsVisible ? '' : 'hidden'} ${selectedButton === 'cafe' ? 'selected' : ''}`} onClick={() => { setSelectedButton(prev => prev === 'cafe' ? null : 'cafe'); fetchQuietPlacesData(['cafe']); }}>Cozy Cafes</button>
 
-        <button className={`button ${selectedButton === 'museum' ? 'selected' : ''}`} onClick={() => { setSelectedButton(prev => prev === 'museum' ? null : 'museum'); fetchQuietPlacesData(['museum']); }}>Timeless Museums</button>
+        <button id="hidden-gem-button" className={`button ${areButtonsVisible ? '' : 'hidden'} ${selectedButton === 'library' ? 'selected' : ''}`} onClick={() => { setSelectedButton(prev => prev === 'library' ? null : 'library'); fetchQuietPlacesData(['library']); }}>Quiet Libraries</button>
 
-        <button className={`button ${selectedButton === 'read_place' ? 'selected' : ''}`} onClick={() => { setSelectedButton(prev => prev === 'read_place' ? null : 'read_place'); fetchQuietPlacesData(['read_place']); }}>Reading Spots</button>
+        <button id="hidden-gem-button" className={`button ${areButtonsVisible ? '' : 'hidden'} ${selectedButton === 'museum' ? 'selected' : ''}`} onClick={() => { setSelectedButton(prev => prev === 'museum' ? null : 'museum'); fetchQuietPlacesData(['museum']); }}>Timeless Museums</button>
 
-        <button className={`button ${selectedButton === 'study_place' ? 'selected' : ''}`} onClick={() => { setSelectedButton(prev => prev === 'study_place' ? null : 'study_place'); fetchQuietPlacesData(['library']); }}>Study Spaces</button>
+        <button id="hidden-gem-button" className={`button ${areButtonsVisible ? '' : 'hidden'} ${selectedButton === 'read_place' ? 'selected' : ''}`} onClick={() => { setSelectedButton(prev => prev === 'read_place' ? null : 'read_place'); fetchQuietPlacesData(['read_place']); }}>Reading Spots</button>
 
-        <button className={`button ${selectedButton === 'hidden_gems' ? 'selected' : ''}`} onClick={() => { setSelectedButton(prev => prev === 'hidden_gems' ? null : 'hidden_gems'); fetchQuietPlacesData(['secret_spot', 'secluded_spot']); }}>Hidden Gems</button>
+        <button id="hidden-gem-button" className={`button ${areButtonsVisible ? '' : 'hidden'} ${selectedButton === 'study_place' ? 'selected' : ''}`} onClick={() => { setSelectedButton(prev => prev === 'study_place' ? null : 'study_place'); fetchQuietPlacesData(['library']); }}>Study Spaces</button>
+
+        <button id="hidden-gem-button" className={`button ${areButtonsVisible ? '' : 'hidden'} ${selectedButton === 'hidden_gems' ? 'selected' : ''}`} onClick={() => { setSelectedButton(prev => prev === 'hidden_gems' ? null : 'hidden_gems'); fetchQuietPlacesData(['secret_spot', 'secluded_spot']); }}>Hidden Gems</button>
 
       </div>
 
       <div className="heatmap-toggle">
-        <Tooltip title="Show/Hide Route">
+        <Tooltip title="Show/Hide Lines">
           <div className="icon-button-wrapper">
             <IconButton
               onClick={() => setShowPolylines(!showPolylines)}

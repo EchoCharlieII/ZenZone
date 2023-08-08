@@ -2,7 +2,7 @@
     position: absolute;
     top: 10px;
     right: 10px;
-    z-index: 9999;
+    z-index: 500;
   }
   
   .icon-button-wrapper {
@@ -13,8 +13,33 @@
 
   .button-container {
     position: absolute; 
-    right: 4%;
+    right: 50px;
     white-space: nowrap;
+    align-items: right;
+  }
+
+
+  #only-mobile {
+    visibility: hidden;
+  }
+
+
+  @media only screen and (max-width: 940px) {
+    #only-mobile {
+      visibility: visible;
+    }
+    
+    .hidden {
+      visibility: hidden;
+    }
+
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      align-items: right;
+      white-space: normal;
+      max-width: 200px;
+    }
   }
 
   .button {
