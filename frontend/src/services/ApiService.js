@@ -21,6 +21,27 @@ const ApiService = {
       throw error;
     }
   },
+
+  circularWalking: async (date, source, duration) => {
+    try {
+      // Generating the POST request to the backend
+      const response = await axios.post(
+        "http://localhost:8000/map-api/circle-path",
+        {
+          "date": date,
+          "source": source,
+          "duration": duration,
+        },
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error("Error:", error);
+      throw error;
+    }
+  },
+
   submitDate: async (date) => {
     try {
       // show loading screen

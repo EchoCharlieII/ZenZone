@@ -36,7 +36,7 @@ export default function DateSelector({ onDateSubmit, startLocation, endLocation 
     <div>
       <CustomDatePicker onDateChange={handleDateChange} />
       <br />
-      <p style={{fontFamily: "initial", fontSize: 3}}>{time ? "Time Spent: " + time["hour"] +" hour(s) and "+ time["minute"] +" minute(s)" : ""}</p>
+      <p style={{fontFamily: "initial", fontSize: 3}}>{time ? "Time: " + time["hour"] +" hour(s) and "+ time["minute"] +" minute(s)" : ""}</p>
       <p style={{fontFamily: "initial", fontSize: 3}}>{distance ? "Distance: " + distance["km"] + "." + distance["meter"] + " km" : ""}</p>
       <br />
       <SubmitButton onSubmit={handleSubmit} selectedDate={selectedDate} />

@@ -3,6 +3,7 @@ import { Sidebar as ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import RouteOutlinedIcon from "@mui/icons-material/RouteOutlined";
 import DiamondOutlinedIcon from "@mui/icons-material/DiamondOutlined";
+import TransferWithinAStationOutlinedIcon from '@mui/icons-material/TransferWithinAStationOutlined';
 import LocalCafeOutlinedIcon from "@mui/icons-material/LocalCafeOutlined";
 import MuseumOutlinedIcon from "@mui/icons-material/MuseumOutlined";
 import LocalLibraryOutlinedIcon from "@mui/icons-material/LocalLibraryOutlined";
@@ -13,15 +14,17 @@ import "../pages/Map.css";
 import opencage from "opencage-api-client";
 import Autosuggest from "react-autosuggest";
 import ModeSelectMenu from "./RoutePlanner/ModeSelectMenu";
+import ApiService from "../services/ApiService";
+
 
 export default function Sidebar({ onLocationsSelected, setMapData }) {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [showDateSelector, setShowDateSelector] = useState(false);
-  const [showGemItems, setShowGemItems] = useState(false);
+  const [showCW, setShowCW] = useState(false);
 
   // For the Starting Location
-  const [value, setValue] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
+  const [valueOrigin, setValueOrigin] = useState("");
+  const [suggestionsOrigin, setSuggestionsOrigin] = useState([]);
 
   // For the Destination Location
   const [valueDestination, setValueDestination] = useState("");
@@ -36,7 +39,7 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
   const [startLocation, setStartLocation] = useState(null);
   const [endLocation, setEndLocation] = useState(null);
 
-  const onSuggestionSelected = (event, { suggestion }) => {
+  const onSuggestionSelectedOrigin = (event, { suggestion }) => {
     setStartLocation(suggestion.latlng);
   };
 
@@ -45,7 +48,7 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
   };
 
   // Restrict location suggestions to New York.
-  const fetch = ({ value }) => {
+  const fetchOrigin = ({ value }) => {
     opencage
       .geocode({ 
         key: "378bbab421b943cc95ef067c6295c57a", 
@@ -57,7 +60,7 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
       })
       .then((response) => {
         const { results } = response;
-        setSuggestions(
+        setSuggestionsOrigin(
           results.map((result) => ({
             name: result.formatted,
             latlng: [result.geometry.lat, result.geometry.lng],
@@ -93,11 +96,11 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
         });
     };
   
-  const inputProps = {
+  const inputPropsOrigin = {
     placeholder: "Search a location...",
-    value,
+    value: valueOrigin,
     onChange: (_, { newValue }) => {
-      setValue(newValue);
+      setValueOrigin(newValue);
     },
   };
 
@@ -109,37 +112,35 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
     },
   };
 
-  const onSuggestionsFetchRequested = ({ value }) => {
-    fetch({ value });
+  const onSuggestionsFetchRequestedOrigin = ({ value }) => {
+    fetchOrigin({ value });
   };
 
   const onSuggestionsFetchRequestedDestination = ({ value }) => {
     fetchDestination({ value });
   };
 
-  const onSuggestionsClearRequested = () => {
-    setSuggestions([]);
+  const onSuggestionsClearRequestedOrigin = () => {
+    setSuggestionsOrigin([]);
   };
 
   const onSuggestionsClearRequestedDestination = () => {
     setSuggestionsDestination([]);
   };
 
-  const getSuggestionValue = (suggestion) => suggestion.name;
+  const getSuggestionValueOrigin = (suggestion) => suggestion.name;
 
   const getSuggestionValueDestination = (suggestion) => suggestion.name;
 
-  const renderSuggestion = (suggestion) => <div>{suggestion.name}</div>;
+  const renderSuggestionOrigin = (suggestion) => <div>{suggestion.name}</div>;
 
-  const renderSuggestionDestination = (suggestion) => (
-    <div>{suggestion.name}</div>
-  );
+  const renderSuggestionDestination = (suggestion) => (<div>{suggestion.name}</div>);
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
     if (isSidebarOpen) {
       setShowDateSelector(false);
-      setShowGemItems(false);
+      setShowCW(false);
     }
   };
 
@@ -147,8 +148,8 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
     setShowDateSelector(!showDateSelector);
   };
 
-  const toggleGemItems = () => {
-    setShowGemItems(!showGemItems);
+  const toggleCW = () => {
+    setShowCW(!showCW);
   };
 
   // useEffect(() => {
@@ -173,6 +174,7 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
               style={{ width: "150px", marginTop: "5px" }}
             />
           </MenuItem>
+
           <MenuItem
             onClick={() => {
               if (!isSidebarOpen) toggleSidebar();
@@ -185,62 +187,19 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
 
           {showDateSelector && (
             <div className="autosuggest-form">
-              {/* <p style={{ fontSize: "16px" }}>Select starting and ending points:</p>
-              <Autosuggest
-                suggestions={suggestions}
-                onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-                onSuggestionsClearRequested={onSuggestionsClearRequested}
-                getSuggestionValue={getSuggestionValue}
-                renderSuggestion={renderSuggestion}
-                inputProps={inputProps}
-                onSuggestionSelected={onSuggestionSelected}
-                theme={{
-                  suggestionsList: {
-                    listStyleType: "none", // Removes bullet points
-                  },
-                  suggestion: {
-                    fontSize: "14px", // Sets font size to 14px
-                  },
-                }}
-              />
-              <Autosuggest
-                suggestions={suggestionsDestination}
-                onSuggestionsFetchRequested={
-                  onSuggestionsFetchRequestedDestination
-                }
-                onSuggestionsClearRequested={
-                  onSuggestionsClearRequestedDestination
-                }
-                getSuggestionValue={getSuggestionValueDestination}
-                renderSuggestion={renderSuggestionDestination}
-                inputProps={inputPropsDestination}
-                onSuggestionSelected={onSuggestionSelectedDestination}
-                theme={{
-                  suggestionsList: {
-                    listStyleType: "none", // Removes bullet points
-                    marginLeft: "-35px",
-                  },
-                  suggestion: {
-                    fontSize: "13px", // Sets font size to 14px
-                  },
-                }}
-              />
-              <div className="date-selector-container">
-                <DateSelector onDateSubmit={setMapData} />
-              </div>
-              <button onClick={null}>Clear</button>   */}
 
               <p style={{ fontSize: "16px" }}>
                 Select starting and ending points:
               </p>
+              
               <Autosuggest
-                suggestions={suggestions}
-                onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-                onSuggestionsClearRequested={onSuggestionsClearRequested}
-                getSuggestionValue={getSuggestionValue}
-                renderSuggestion={renderSuggestion}
-                inputProps={inputProps}
-                onSuggestionSelected={onSuggestionSelected}
+                suggestions={suggestionsOrigin}
+                onSuggestionsFetchRequested={onSuggestionsFetchRequestedOrigin}
+                onSuggestionsClearRequested={onSuggestionsClearRequestedOrigin}
+                getSuggestionValue={getSuggestionValueOrigin}
+                renderSuggestion={renderSuggestionOrigin}
+                inputProps={inputPropsOrigin}
+                onSuggestionSelected={onSuggestionSelectedOrigin}
                 theme={{
                   suggestionsList: {
                     listStyleType: "none", // Removes bullet points
@@ -285,6 +244,33 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
 
             </div>
           )}
+
+          <button onClick={() => {
+            ApiService.circularWalking(new Date(), [40.782358, -73.965374], 60)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });}
+        }>Test</button>
+          
+          <MenuItem 
+            onClick={() => {
+              toggleCW();
+              if (!isSidebarOpen) {
+                toggleSidebar();
+              }
+            }} 
+            icon={<TransferWithinAStationOutlinedIcon />}
+          >
+            Circular Walking
+          </MenuItem>
+          
+          {showCW && (
+            <p>Hello World</p>
+          )}
+
         </Menu>
       </ProSidebar>
     </div>
