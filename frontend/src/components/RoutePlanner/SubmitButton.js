@@ -10,5 +10,5 @@ export default function SubmitButton({ selectedDate, onSubmit }) {
     }
   };
 
-  return <button onClick={handleSubmit}>Submit</button>;
+  return <button class="sidebar-submit" onClick={handleSubmit}>Submit</button>;
 }

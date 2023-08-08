@@ -396,7 +396,7 @@ function grapDataFromApi() {
             />
             <br />
               <p style={{ fontSize: "16px" }}>
-                Enter your wanted walking time (in minutes):
+                Walk Duration (in min):
               </p>
               <TimeInput onValueChange={handleTimeChange} />
               <br />
@@ -404,7 +404,7 @@ function grapDataFromApi() {
               <br />
               <p style={{fontFamily: "initial", fontSize: 3}}>{cwLength ? "Length: " + cwLength["km"] + "." + cwLength["meter"] + " km" : ""}</p>
               <br />
-              <button onClick={grapDataFromApi}>Submit</button>
+              <button class="sidebar-submit" onClick={grapDataFromApi}>Submit</button>
 
             </div>
         )}
