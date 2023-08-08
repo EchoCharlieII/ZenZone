@@ -176,14 +176,25 @@ def extract_vertices_from_linestring(wkt_linestring):
     return vertices
 
 
-def random_walk(graph, starting_node, desired_time):
+def random_walk(graph, back_graph, starting_node, desired_time):
+    previous_nodes = [starting_node]
     current_node = starting_node
     total_time = 0
     forward_path = []
 
-    while total_time < (desired_time / 2):
-        neighboring_crossings = list(graph.neighbors(current_node))
-        next_node = random.choice(neighboring_crossings)
+    while total_time < (desired_time * 0.7):
+        # get next node
+        neighboring_nodes = list(graph.neighbors(current_node))
+        min_weight = float('inf')
+        next_node = neighboring_nodes[0]
+        for node in neighboring_nodes:
+            if node not in previous_nodes:
+                edge_data = graph.get_edge_data(current_node, node)
+                weight = edge_data['weight']
+                if weight < min_weight:
+                    min_weight = weight
+                    next_node = node
+        # add node data to the path
         forward_path.append(
             {
                 "geometry": [current_node, next_node],
@@ -194,19 +205,21 @@ def random_walk(graph, starting_node, desired_time):
         walking_time = math.ceil((distance / 5) * 60)  # Use busyness or other factors to estimate walking time
         total_time += walking_time
 
+        previous_nodes.append(current_node)
         current_node = next_node
-    back_path = find_best_path(graph, current_node, starting_node)
+
+    back_path = find_best_path(back_graph, current_node, starting_node)
 
     return forward_path + back_path
 
 
 # Step 5: Main function to generate the circular path
-def generate_circular_path(graph, user_location, desired_walking_time):
+def generate_circular_path(graph, back_graph, user_location, desired_walking_time):
     # Step 1: Find the nearest crossing point to the user's starting location
     nearest_user_crossing, _ = find_nearest_crossing_points(graph, user_location, user_location)
 
     # Step 2 and 3: Perform a random walk
-    random_walk_path = random_walk(graph, nearest_user_crossing, desired_walking_time)
+    random_walk_path = random_walk(graph, back_graph, nearest_user_crossing, desired_walking_time)
 
     # return circular_path
     return random_walk_path
