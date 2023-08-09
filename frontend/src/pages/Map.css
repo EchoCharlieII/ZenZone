@@ -147,6 +147,7 @@ select {
   height: 40px;
   border: hidden;
   border-radius: 5px;
+  margin-top: 16px;
 }
 
 .sidebar-submit:hover {

@@ -424,11 +424,15 @@ function grapDataFromApi() {
               <TimeInput onValueChange={handleTimeChange} />
               <br />
               <CustomDatePicker onDateChange={handleCWDateChange} currentDate={circularWalkDate}/>
-              <br />
-              <p style={{fontFamily: "initial", fontSize: 3}}>{cwLength ? "Length: " + cwLength["km"] + "." + cwLength["meter"] + " km" : ""}</p>
-              <br />
               <button class="sidebar-submit" onClick={grapDataFromApi}>Submit</button>
-
+              {cwLength && (
+                <>
+                  <br />
+                  <p style={{fontFamily: "initial", fontSize: 16}}>{cwLength ? "Distance: " + cwLength["km"] + "." + cwLength["meter"] + " km" : ""}</p>
+                  <br />
+                  
+                </>
+              )}
             </div>
         )}
 
