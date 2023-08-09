@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Sidebar as ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import RouteOutlinedIcon from "@mui/icons-material/RouteOutlined";
+import MapIcon from '@mui/icons-material/Map';
 import DiamondOutlinedIcon from "@mui/icons-material/DiamondOutlined";
 import TransferWithinAStationOutlinedIcon from '@mui/icons-material/TransferWithinAStationOutlined';
 import LocalCafeOutlinedIcon from "@mui/icons-material/LocalCafeOutlined";
@@ -22,6 +23,7 @@ import TimeInput from "./CircularWalk/TimeInput";
 export default function Sidebar({ onLocationsSelected, setMapData }) {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [showDateSelector, setShowDateSelector] = useState(false);
+  const [showHeatmap, setShowHeatmap] = useState(false);
   const [showCW, setShowCW] = useState(false);
 
   // For the Starting Location
@@ -235,6 +237,10 @@ function grapDataFromApi() {
     }
   };
 
+  const toggleHeatmap = () => {
+    setShowHeatmap(!showHeatmap);
+  };
+
   const toggleDateSelector = () => {
     setShowDateSelector(!showDateSelector);
   };
@@ -288,6 +294,23 @@ function grapDataFromApi() {
               style={{ width: "150px", marginTop: "5px" }}
             />
           </MenuItem>
+
+          <MenuItem
+            onClick={() => {
+              if (!isSidebarOpen) toggleSidebar();
+              toggleHeatmap();
+            }}
+            icon={<MapIcon />}
+          >
+            Heatmap
+          </MenuItem>
+
+          {showHeatmap && (
+            <div class="dateHeatmap">
+                <DateSelector onDateSubmit={setMapData} heatmap={true}/>
+
+            </div>
+          )}
 
           <MenuItem
             onClick={() => {
@@ -350,7 +373,7 @@ function grapDataFromApi() {
               <ModeSelectMenu onSelectionChange={handleSelectionChange} />
 
               <div className="date-selector-container">
-                <DateSelector onDateSubmit={setMapData} startLocation={startLocation} endLocation={endLocation} mode={mode}/>
+                <DateSelector onDateSubmit={setMapData} startLocation={startLocation} endLocation={endLocation} mode={mode} heatmap={false}/>
               </div>
 
             </div>

@@ -30,6 +30,16 @@
   padding-left: 35px;
 }
 
+.dateHeatmap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start; 
+  height: 100%;
+  margin: 5px;
+  padding-left: 60px;
+}
+
 .autosuggest-form {
 display: flex;
 flex-direction: column;
