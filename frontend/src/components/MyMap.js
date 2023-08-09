@@ -39,7 +39,7 @@ export default function MyMap({ mapData, route }) {
   // Function to calculate the color based on street_calm_rate
   const getColor = (streetCalmRate) => {
     if (streetCalmRate === null) {
-      return "green"; // default color
+      return "rgb(210, 230, 0)"; // default color
     }
 
     const brightnessFactor = 0.95;  // Reduce brightness to get darker colors. You can adjust this as needed.

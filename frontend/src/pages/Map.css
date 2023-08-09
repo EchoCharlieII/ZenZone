@@ -30,6 +30,16 @@
   padding-left: 35px;
 }
 
+.dateHeatmap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start; 
+  height: 100%;
+  margin: 5px;
+  padding-left: 60px;
+}
+
 .autosuggest-form {
 display: flex;
 flex-direction: column;
@@ -38,6 +48,19 @@ align-items: flex-start;
 height: 100%;
 margin: 5px;
 padding-left: 60px;
+}
+
+.autosuggest-form li, .circular-walking li {
+  padding: 5px;
+  display: box;
+  width: 244px;
+  overflow: hidden;
+  max-height: 60px;
+  border-bottom: 2px solid #000000;
+}
+
+.autosuggest-form li:hover, .circular-walking li:hover {
+  background-color: rgba(61, 83, 57, 0.3);
 }
 
 .circular-walking {
