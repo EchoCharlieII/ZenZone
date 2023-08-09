@@ -143,7 +143,7 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
 
 
 // For circular walk feature
-const [circularWalkDate, setCircularWalkDate] = useState(null);
+const [circularWalkDate, setCircularWalkDate] = useState(new Date());
 const [circularWalkLocation, setCircularWalkLocation] = useState(null);
 const [circularWalkTime, setCircularWalkTime] = useState(null);
 
@@ -400,7 +400,7 @@ function grapDataFromApi() {
               </p>
               <TimeInput onValueChange={handleTimeChange} />
               <br />
-              <CustomDatePicker onDateChange={handleCWDateChange} />
+              <CustomDatePicker onDateChange={handleCWDateChange} currentDate={circularWalkDate}/>
               <br />
               <p style={{fontFamily: "initial", fontSize: 3}}>{cwLength ? "Length: " + cwLength["km"] + "." + cwLength["meter"] + " km" : ""}</p>
               <br />
