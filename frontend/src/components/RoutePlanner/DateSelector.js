@@ -7,7 +7,7 @@ import './DateSelector.css';
 
 export default function DateSelector({ onDateSubmit, startLocation, endLocation , mode}) {
   const [mapData, setMapData] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [time, setTime] = useState(null);
   const [distance, setDistance] = useState(null);
 
@@ -34,7 +34,7 @@ export default function DateSelector({ onDateSubmit, startLocation, endLocation 
   };
   return (
     <div>
-      <CustomDatePicker onDateChange={handleDateChange} />
+      <CustomDatePicker onDateChange={handleDateChange} currentDate={selectedDate}/>
       <br />
       <p style={{fontFamily: "initial", fontSize: 3}}>{time ? "Time: " + time["hour"] +" hour(s) and "+ time["minute"] +" minute(s)" : ""}</p>
       <p style={{fontFamily: "initial", fontSize: 3}}>{distance ? "Distance: " + distance["km"] + "." + distance["meter"] + " km" : ""}</p>

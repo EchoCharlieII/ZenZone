@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 export default function ModeSelectMenu({ onSelectionChange }) {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState("balance");
 
   const handleChange = (event) => {
     const newValue = event.target.value;

@@ -4,9 +4,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./DateSelector.css";
 
-export default function CustomDatePicker({ onDateChange }) {
+export default function CustomDatePicker({ onDateChange, currentDate }) {
   // The selectedDate can be changed, therefore we need to use useState
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(currentDate);
   
   const handleDateChange = (date) => {
     setSelectedDate(date);

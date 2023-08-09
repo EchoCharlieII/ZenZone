@@ -33,7 +33,7 @@ export default function Sidebar({ onLocationsSelected, setMapData }) {
   const [suggestionsDestination, setSuggestionsDestination] = useState([]);
 
   // For the modeSelectMenu
-  const [mode, setMode] = useState("");
+  const [mode, setMode] = useState("balance");
   const handleSelectionChange = (newValue) => {
     setMode(newValue);
   };
