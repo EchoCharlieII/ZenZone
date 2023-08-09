@@ -50,6 +50,19 @@ margin: 5px;
 padding-left: 60px;
 }
 
+.autosuggest-form li, .circular-walking li {
+  padding: 5px;
+  display: box;
+  width: 244px;
+  overflow: hidden;
+  max-height: 60px;
+  border-bottom: 2px solid #000000;
+}
+
+.autosuggest-form li:hover, .circular-walking li:hover {
+  background-color: rgba(61, 83, 57, 0.3);
+}
+
 .circular-walking {
   display: flex;
   flex-direction: column;
