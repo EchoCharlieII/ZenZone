@@ -246,7 +246,7 @@ export default function MyMap({ mapData, route }) {
           onClick={() => { 
             setSelectedButton(prev => {
               const newValue = prev === 'study_place' ? null : 'study_place'; 
-              fetchQuietPlacesData(newValue === 'study_place' ? ['study_space'] : []); 
+              fetchQuietPlacesData(newValue === 'study_place' ? ['study_place'] : []); 
               return newValue; 
             });
           }}
