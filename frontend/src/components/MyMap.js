@@ -88,7 +88,7 @@ export default function MyMap({ mapData, route }) {
       return;
     }  
     try {
-      const requests = placeTypes.map(placeType => fetch(`http://localhost:8000/map-api/quiet-place-info?place=${placeType}`));
+      const requests = placeTypes.map(placeType => fetch(`/map-api/quiet-place-info?place=${placeType}`));
       const responses = await Promise.all(requests);
       
       responses.forEach(response => {
@@ -246,7 +246,7 @@ export default function MyMap({ mapData, route }) {
           onClick={() => { 
             setSelectedButton(prev => {
               const newValue = prev === 'study_place' ? null : 'study_place'; 
-              fetchQuietPlacesData(newValue === 'study_place' ? ['study_space'] : []); 
+              fetchQuietPlacesData(newValue === 'study_place' ? ['study_place'] : []); 
               return newValue; 
             });
           }}

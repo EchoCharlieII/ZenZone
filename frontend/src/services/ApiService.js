@@ -5,7 +5,7 @@ const ApiService = {
     try {
       // Generating the POST request to the backend
       const response = await axios.post(
-        "http://localhost:8000/map-api/best-path",
+        "/map-api/best-path",
         {
           date: selectedDate,
           source: startLocation,
@@ -26,7 +26,7 @@ const ApiService = {
     try {
       // Generating the POST request to the backend
       const response = await axios.post(
-        "http://localhost:8000/map-api/circle-path",
+        "/map-api/circle-path",
         {
           "date": date,
           "source": source,
@@ -51,7 +51,7 @@ const ApiService = {
 
       // Generating the POST request to the backend
       const response = await axios.post(
-        "http://localhost:8000/map-api/render-map",
+        "/map-api/render-map",
         { date }
       );
 
