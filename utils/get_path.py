@@ -213,7 +213,7 @@ def random_walk(graph, back_graph, starting_node, desired_time):
     return forward_path + back_path
 """
 
-def random_walk(graph, starting_node, desired_time, max_retries=15):
+def random_walk(graph, starting_node, desired_time, max_retries=25):
     """
     Generate a route starting from 'starting_node' for a total time close to 'desired_time'.
     """
