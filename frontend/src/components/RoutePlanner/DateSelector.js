@@ -53,12 +53,25 @@ export default function DateSelector({ onDateSubmit, startLocation, endLocation 
       <CustomDatePicker onDateChange={handleDateChange} currentDate={selectedDate}/>
       <SubmitButton onSubmit={handleSubmit} selectedDate={selectedDate} />
       {time && (
-        <>
-          <br />
-          <p style={{fontFamily: "initial", fontSize: 16}}>{time ? "Time: " + time["hour"] +" hour(s) and "+ time["minute"] +" minute(s)" : ""}</p>
-          <p style={{fontFamily: "initial", fontSize: 16}}>{distance ? "Distance: " + distance["km"] + "." + distance["meter"] + " km" : ""}</p>
-          <br />
-        </>
+        <div class="result-route">
+          <p style={{fontFamily: "initial", fontSize: 16}}>
+            {time ? 
+              "Time: " + 
+              (time["hour"] > 0 ? (time["hour"] === 1 ? time["hour"] + " hour " : time["hour"] + " hours ") : "") +
+              (time["hour"] > 0 ? "and " : "") + 
+              (time["minute"] === 1 ? time["minute"] + " minute" : time["minute"] + " minutes")
+              : ""}
+          </p>
+
+          <p style={{fontFamily: "initial", fontSize: 16}}>
+            {distance ? 
+              "Distance: " + 
+              (distance["km"] === 0 ? 
+                distance["meter"] + " m" 
+                : distance["km"] + "." + String(distance["meter"]).charAt(0) + " km")
+              : ""}
+          </p>
+        </div>
       )}
     </div>
   );

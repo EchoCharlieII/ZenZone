@@ -428,7 +428,14 @@ function grapDataFromApi() {
               {cwLength && (
                 <>
                   <br />
-                  <p style={{fontFamily: "initial", fontSize: 16}}>{cwLength ? "Distance: " + cwLength["km"] + "." + cwLength["meter"] + " km" : ""}</p>
+                  <p style={{fontFamily: "initial", fontSize: 16}}>
+                    {cwLength ? 
+                    "Distance: " + 
+                    (cwLength["km"] === 0 ? 
+                    cwLength["meter"] + " m" 
+                      : cwLength["km"] + "." + String(cwLength["meter"]).charAt(0) + " km")
+                    : ""}
+                    </p>
                   <br />
                   
                 </>
