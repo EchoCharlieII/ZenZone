@@ -3,6 +3,11 @@ import axios from "axios";
 const ApiService = {
   renderBestRoute: async (selectedDate, startLocation, endLocation, mode) => {
     try {
+      // show loading screen
+      if (document.getElementById("loading-screen")) {
+        document.getElementById("loading-screen").style.display = "block";
+      }
+
       // Generating the POST request to the backend
       const response = await axios.post(
         "http://localhost:8000/map-api/best-path",
@@ -17,6 +22,10 @@ const ApiService = {
 
       return response.data;
     } catch (error) {
+      if (document.getElementById("loading-screen")) {
+        document.getElementById("loading-screen").style.display = "none";
+      }
+      
       console.error("Error:", error);
       throw error;
     }
@@ -24,6 +33,11 @@ const ApiService = {
 
   circularWalking: async (date, source, duration) => {
     try {
+      // show loading screen
+      if (document.getElementById("loading-screen")) {
+        document.getElementById("loading-screen").style.display = "block";
+      }
+
       // Generating the POST request to the backend
       const response = await axios.post(
         "http://localhost:8000/map-api/circle-path",
@@ -37,6 +51,10 @@ const ApiService = {
 
       return response.data;
     } catch (error) {
+      if (document.getElementById("loading-screen")) {
+        document.getElementById("loading-screen").style.display = "none";
+      }
+
       console.error("Error:", error);
       throw error;
     }
