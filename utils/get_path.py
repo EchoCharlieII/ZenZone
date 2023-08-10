@@ -213,28 +213,41 @@ def random_walk(graph, back_graph, starting_node, desired_time):
     return forward_path + back_path
 """
 
-def random_walk(graph, starting_node, desired_time, max_retries=25):
+def random_walk(graph, starting_node, desired_time, max_retries=25, retries=0):
     """
     Generate a route starting from 'starting_node' for a total time close to 'desired_time'.
     """
     
-    def manhattan_point(base_point, distance):
-        """Generate a random point approx 'distance' away from base_point using Manhattan distance within specified bounds"""
+    def manhattan_point(base_point, distance, prev_angle=None):
+        """
+        Generate a random point approx 'distance' away from base_point using Manhattan distance within specified bounds.
+        Rotate the direction approximately 90 degrees clockwise from the previous angle.
+        """
         lat_per_km = 1/111
         lon_per_km = 1/85
         
-        while True:  # Keep generating until we get a valid point within bounds
-            dx = random.uniform(0, distance)
-            dy = distance - dx
-            direction_x = random.choice([-1, 1])
-            direction_y = random.choice([-1, 1])
-            new_point = (base_point[0] + dx * direction_x * lat_per_km, base_point[1] + dy * direction_y * lon_per_km)
-            
-            # Check if the point is within bounds
-            if 40.477399 <= new_point[0] <= 40.917577 and -74.25909 <= new_point[1] <= -73.700272:
-                return new_point
-            else:
-                distance = 0.9 * distance
+        # Generate a random initial angle if it's the first point
+        if prev_angle is None:
+            angle = random.uniform(0, 90)  # in degrees
+        else:
+            angle = prev_angle + random.uniform(75, 105)
+
+        angle = angle % 360  # Wrap around to stay within [0, 360]
+        
+        dx = distance * math.cos(math.radians(angle))
+        dy = distance * math.sin(math.radians(angle))
+        
+        new_point = (base_point[0] + dx * lat_per_km, base_point[1] + dy * lon_per_km)
+        
+        # If the point isn't within bounds, retry with a shorter distance
+        while not (40.477399 <= new_point[0] <= 40.917577 and -74.25909 <= new_point[1] <= -73.700272):
+            distance = 0.9 * distance
+            dx = distance * math.cos(math.radians(angle))
+            dy = distance * math.sin(math.radians(angle))
+            new_point = (base_point[0] + dx * lat_per_km, base_point[1] + dy * lon_per_km)
+        
+        return new_point, angle
+
     
     def get_path_with_retry(start, end):
         """Attempt to get a path with retries upon failure"""
@@ -244,7 +257,7 @@ def random_walk(graph, starting_node, desired_time, max_retries=25):
                 return path
             # If path finding failed, generate a new 'end' point and try again
             random_distance = random.uniform(0.05, 0.1*desired_distance)
-            end = manhattan_point(starting_node, random_distance)
+            end, _ = manhattan_point(starting_node, random_distance)
             print(f"Path finding failed. Generating a new endpoint: {end}")
         return None
     
@@ -252,9 +265,11 @@ def random_walk(graph, starting_node, desired_time, max_retries=25):
     
     points = []
     accumulated_distance = 0
-    while accumulated_distance < 0.7 * desired_distance:
-        random_distance = desired_distance * random.uniform(0.05, 0.25)
-        next_point = manhattan_point(starting_node, random_distance)
+    prev_angle = None
+
+    while accumulated_distance < 0.5 * desired_distance:
+        random_distance = desired_distance * random.uniform(0.15, 0.25)
+        next_point, prev_angle = manhattan_point(starting_node, random_distance, prev_angle)
         accumulated_distance += random_distance
         points.append(next_point)
 
@@ -268,7 +283,7 @@ def random_walk(graph, starting_node, desired_time, max_retries=25):
             break
         paths.extend(path_segment)
         current_start = point
-        
+
     if not paths or current_start != starting_node:
         print("Calculating path back to start...")
         path_to_start = get_path_with_retry(current_start, starting_node)
@@ -277,6 +292,18 @@ def random_walk(graph, starting_node, desired_time, max_retries=25):
         else:
             paths.extend(path_to_start)
             print("Complete path found.")
+
+    lower_bound = 0 * desired_distance
+    upper_bound = 1 * desired_distance
+
+    if not (lower_bound <= accumulated_distance <= upper_bound) or not paths:
+        retries += 1
+        if retries <= max_retries:
+            print(f"Retrying... Attempt {retries}/{max_retries}")
+            return random_walk(graph, starting_node, desired_time, max_retries, retries)
+        else:
+            print(f"Failed after {max_retries} retries.")
+            return []
             
     return paths
 
