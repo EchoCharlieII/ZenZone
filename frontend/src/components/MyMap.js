@@ -177,6 +177,9 @@ export default function MyMap({ mapData, route }) {
   const [selectedButton, setSelectedButton] = useState(null);
   const [areButtonsVisible, setButtonsVisible] = useState(false);
 
+  const defaultOpacity = 1; 
+  const routeOpacity = 0.80;
+
 
   return (
     <div style={{ width: '100%', height: '100%' }}>
@@ -295,6 +298,7 @@ export default function MyMap({ mapData, route }) {
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution="Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors"
+          opacity={showPolylines ? routeOpacity : defaultOpacity}
         />        
 
         {renderMarkers()}
