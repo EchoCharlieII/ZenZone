@@ -106,8 +106,8 @@ def circular_walking(request):
         {
             'path': circular_path,
             'time': {
-                'hour': (data['duration'] // 60),
-                'minute': (data['duration'] % 60),
+                'hour': (km // 5),
+                'minute': (int(((km *1000 + meter) % 5000)/5000 * 60)),
             },
             'distance': {
                 'km': km,

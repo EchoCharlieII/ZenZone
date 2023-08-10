@@ -175,7 +175,7 @@ def extract_vertices_from_linestring(wkt_linestring):
 
     return vertices
 
-
+"""
 def random_walk(graph, back_graph, starting_node, desired_time):
     previous_nodes = [starting_node]
     current_node = starting_node
@@ -211,6 +211,84 @@ def random_walk(graph, back_graph, starting_node, desired_time):
     back_path = find_best_path(back_graph, current_node, starting_node)
 
     return forward_path + back_path
+"""
+
+def random_walk(graph, starting_node, desired_time, max_retries=15):
+    """
+    Generate a route starting from 'starting_node' for a total time close to 'desired_time'.
+    """
+    
+    def manhattan_point(base_point, distance):
+        """Generate a random point approx 'distance' away from base_point using Manhattan distance within specified bounds"""
+        lat_per_km = 1/111
+        lon_per_km = 1/85
+        
+        while True:  # Keep generating until we get a valid point within bounds
+            dx = random.uniform(0, distance)
+            dy = distance - dx
+            direction_x = random.choice([-1, 1])
+            direction_y = random.choice([-1, 1])
+            new_point = (base_point[0] + dx * direction_x * lat_per_km, base_point[1] + dy * direction_y * lon_per_km)
+            
+            # Check if the point is within bounds
+            if 40.477399 <= new_point[0] <= 40.917577 and -74.25909 <= new_point[1] <= -73.700272:
+                return new_point
+            else:
+                distance = 0.9 * distance
+    
+    def get_path_with_retry(start, end):
+        """Attempt to get a path with retries upon failure"""
+        for _ in range(max_retries):
+            path = find_best_path(graph, start, end)
+            if path:
+                return path
+            # If path finding failed, generate a new 'end' point and try again
+            random_distance = random.uniform(0.05, 0.1*desired_distance)
+            end = manhattan_point(starting_node, random_distance)
+            print(f"Path finding failed. Generating a new endpoint: {end}")
+        return None
+    
+    desired_distance = (desired_time / 60) * 5  # walking speed = 5 km/h
+    
+    points = []
+    accumulated_distance = 0
+    while accumulated_distance < 0.7 * desired_distance:
+        random_distance = desired_distance * random.uniform(0.05, 0.25)
+        next_point = manhattan_point(starting_node, random_distance)
+        accumulated_distance += random_distance
+        points.append(next_point)
+
+    paths = []
+    current_start = starting_node
+    for point in points:
+        print(f"Calculating path to {point}...")
+        path_segment = get_path_with_retry(current_start, point)
+        if not path_segment:
+            print(f"Failed to compute path to point {point} after max retries. Attempting to return to start.")
+            break
+        paths.extend(path_segment)
+        current_start = point
+        
+    if not paths or current_start != starting_node:
+        print("Calculating path back to start...")
+        path_to_start = get_path_with_retry(current_start, starting_node)
+        if not path_to_start:
+            print("Failed to compute path back to starting node after max retries.")
+        else:
+            paths.extend(path_to_start)
+            print("Complete path found.")
+            
+    return paths
+
+
+
+
+
+
+
+
+
+
 
 
 # Step 5: Main function to generate the circular path
@@ -219,7 +297,7 @@ def generate_circular_path(graph, back_graph, user_location, desired_walking_tim
     nearest_user_crossing, _ = find_nearest_crossing_points(graph, user_location, user_location)
 
     # Step 2 and 3: Perform a random walk
-    random_walk_path = random_walk(graph, back_graph, nearest_user_crossing, desired_walking_time)
+    random_walk_path = random_walk(graph, nearest_user_crossing, desired_walking_time) #back_graph
 
     # return circular_path
     return random_walk_path
