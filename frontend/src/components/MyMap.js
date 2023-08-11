@@ -8,6 +8,8 @@ import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import ModeNightIcon from '@mui/icons-material/ModeNight';
 import './MyMap.css';
 
 
@@ -177,7 +179,7 @@ export default function MyMap({ mapData, route }) {
   const [selectedButton, setSelectedButton] = useState(null);
   const [areButtonsVisible, setButtonsVisible] = useState(false);
 
-
+  const [mapLightness, setMapLightness] = useState(true);
 
   return (
     <div style={{ width: '100%', height: '100%' }}>
@@ -284,6 +286,20 @@ export default function MyMap({ mapData, route }) {
             </IconButton>
           </div>
         </Tooltip>
+        <br />
+        <Tooltip title="Day/Night Mode">
+          <div className="icon-button-wrapper">
+            <IconButton
+              onClick={() => setMapLightness(!mapLightness)}
+            >
+              {mapLightness ? 
+                <LightModeIcon style={{ color: "black" }} /> :
+                <ModeNightIcon style={{ color: "black" }} />
+              }
+            </IconButton>
+          </div>
+        </Tooltip>
+
       </div>
 
       <div id="loading-screen"></div>
@@ -293,7 +309,7 @@ export default function MyMap({ mapData, route }) {
         style={{ width: "100%", height: "100%" }}
         key={keyData}
       >
-        {showPolylines ? (
+        {/* {showPolylines ? (
           // Grayscale Tile Layer
           <TileLayer
             url="https://tiles-eu.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png"
@@ -305,7 +321,22 @@ export default function MyMap({ mapData, route }) {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution="Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors"
           />
+        )}        */}
+
+        {mapLightness ? (
+          // Light Tile Layer
+          <TileLayer
+            url="https://tiles-eu.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png"
+            attribution='&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/about" target="_blank">OpenStreetMap</a> contributors'
+          />
+        ) : (
+          // Dark Tile Layer
+          <TileLayer
+            url="https://tiles-eu.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
+            attribution='&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/about" target="_blank">OpenStreetMap</a> contributors'
+          />
         )}       
+
 
         {renderMarkers()}
 
