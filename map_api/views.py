@@ -79,7 +79,7 @@ def quite_places(request):
     place_info = get_places.get_quiet_place_info()
     if place_type is not None:
         place_info = place_info.get(place_type, None)
-        cache.set(request.GET.get('place'), place_info, 6000)
+        cache.set(request.GET.get('place'), place_info, 86400)
         if place_info is None:
             raise Http404("Place type does not exist")
     return JsonResponse({
