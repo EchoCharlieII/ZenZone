@@ -42,7 +42,7 @@ export default function MyMap({ mapData, route }) {
       return "rgb(210, 230, 0)"; // default color
     }
 
-    const brightnessFactor = 0.95;  // Reduce brightness to get darker colors. You can adjust this as needed.
+    const brightnessFactor = 0.8;  // Reduce brightness to get darker colors. You can adjust this as needed.
     let red = 0;
     let green = 0;
     const blue = 0;
@@ -178,6 +178,7 @@ export default function MyMap({ mapData, route }) {
   const [areButtonsVisible, setButtonsVisible] = useState(false);
 
 
+
   return (
     <div style={{ width: '100%', height: '100%' }}>
       <div className="button-container" style={{ position: 'absolute', zIndex: 900, padding: '10px' }}>
@@ -292,10 +293,19 @@ export default function MyMap({ mapData, route }) {
         style={{ width: "100%", height: "100%" }}
         key={keyData}
       >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution="Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors"
-        />        
+        {showPolylines ? (
+          // Grayscale Tile Layer
+          <TileLayer
+            url="https://tiles-eu.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png"
+            attribution='&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/about" target="_blank">OpenStreetMap</a> contributors'
+          />
+        ) : (
+          // Default Tile Layer
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution="Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors"
+          />
+        )}       
 
         {renderMarkers()}
 

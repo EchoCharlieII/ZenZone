@@ -50,7 +50,7 @@ margin: 5px;
 padding-left: 60px;
 }
 
-.autosuggest-form li, .circular-walking li {
+#react-autowhatever-1 li {
   padding: 5px;
   display: box;
   width: 244px;
@@ -147,8 +147,13 @@ select {
   height: 40px;
   border: hidden;
   border-radius: 5px;
+  margin-top: 16px;
 }
 
 .sidebar-submit:hover {
   background-color: rgba(61, 83, 57, 0.6);
+}
+
+.result-route {
+  margin-top: 16px;
 }

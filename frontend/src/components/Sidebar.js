@@ -150,6 +150,7 @@ const [circularWalkLocation, setCircularWalkLocation] = useState(null);
 const [circularWalkTime, setCircularWalkTime] = useState(null);
 
 const [cwLength, setCwLength] = useState(null);
+const [cwTime, setCwTime] = useState(null);
 
 const [valueCW, setValueCW] = useState("");
 const [suggestionsCW, setSuggestionsCW] = useState([]);
@@ -216,6 +217,7 @@ function grapDataFromApi() {
   .then((response) => {
     setMapData(response.path);
     setCwLength(response.distance);
+    setCwTime(response.time);
   })
   .catch((error) => {
     console.error("Error:", error);
@@ -424,11 +426,27 @@ function grapDataFromApi() {
               <TimeInput onValueChange={handleTimeChange} />
               <br />
               <CustomDatePicker onDateChange={handleCWDateChange} currentDate={circularWalkDate}/>
-              <br />
-              <p style={{fontFamily: "initial", fontSize: 3}}>{cwLength ? "Length: " + cwLength["km"] + "." + cwLength["meter"] + " km" : ""}</p>
-              <br />
               <button class="sidebar-submit" onClick={grapDataFromApi}>Submit</button>
-
+              {cwLength && (
+                <div class="result-route">
+                  <p style={{fontFamily: "initial", fontSize: 16}}>
+                    {cwTime ? 
+                      "Time: " + 
+                      (cwTime["hour"] > 0 ? (cwTime["hour"] === 1 ? cwTime["hour"] + " hour " : cwTime["hour"] + " hours ") : "") +
+                      (cwTime["hour"] > 0 ? "and " : "") + 
+                      (cwTime["minute"] === 1 ? cwTime["minute"] + " minute" : cwTime["minute"] + " minutes")
+                      : ""}
+                  </p>
+                  <p style={{fontFamily: "initial", fontSize: 16}}>
+                    {cwLength ? 
+                    "Distance: " + 
+                    (cwLength["km"] === 0 ? 
+                    cwLength["meter"] + " m" 
+                      : cwLength["km"] + "." + String(cwLength["meter"]).charAt(0) + " km")
+                    : ""}
+                  </p>
+                </div>
+              )}
             </div>
         )}
 
