@@ -179,8 +179,9 @@ export default function MyMap({ mapData, route }) {
   const [selectedButton, setSelectedButton] = useState(null);
   const [areButtonsVisible, setButtonsVisible] = useState(false);
 
-  const [mapLightness, setMapLightness] = useState(true);
-
+  const isDaytime = new Date().getHours() >= 8 && new Date().getHours() <= 18;
+  const [mapLightness, setMapLightness] = useState(isDaytime);
+  
   return (
     <div style={{ width: '100%', height: '100%' }}>
       <div className="button-container" style={{ position: 'absolute', zIndex: 900, padding: '10px' }}>
