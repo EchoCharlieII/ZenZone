@@ -232,11 +232,12 @@ function grapDataFromApi() {
 
 
   const toggleSidebar = () => {
-    setSidebarOpen(!isSidebarOpen);
     if (isSidebarOpen) {
       setShowDateSelector(false);
       setShowCW(false);
+      setShowHeatmap(false);
     }
+    setSidebarOpen(!isSidebarOpen);
   };
 
   const toggleHeatmap = () => {
